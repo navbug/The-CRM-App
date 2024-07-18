@@ -6,11 +6,13 @@ import { FaCirclePlus } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import ClientNotesModal from '../../components/ClientNotesModal';
 import QuickResponseModal from '../../components/QuickResponseModal';
+import AddActivityModal from '../../components/AddActivityModal';
 
 const ClientDetails = () => {
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const [isNotesModalOpen, setIsNotesModalOpen] = useState(false);
   const [isResponseModalOpen, setIsResponseModalOpen] = useState(false);
+  const [isAddActivityModalOpen, setIsAddActivityModalOpen] = useState(false);
   const [clientNotes, setClientNotes] = useState('');
 
   const toggleOptions = () => {
@@ -31,6 +33,14 @@ const ClientDetails = () => {
 
   const closeResponseModal = () => {
     setIsResponseModalOpen(false);
+  };
+
+  const openAddActivityModal = () => {
+    setIsAddActivityModalOpen(true);
+  };
+
+  const closeAddActivityModal = () => {
+    setIsAddActivityModalOpen(false);
   };
 
   const saveNotes = (notes) => {
@@ -145,12 +155,12 @@ const ClientDetails = () => {
         <div className="lg:w-1/2">
           <h2 className="text-xl font-bold mb-4">Timeline</h2>
           <div className='bg-white rounded-sm shadow-md p-6 flex-grow '>
-            <NavLink className="flex justify-start items-center gap-3 mb-4 bg-white text-teal-500 -px-4 py-2 hover:text-teal-600 transition duration-300">
+            <div onClick={openAddActivityModal} className="flex justify-start items-center gap-3 mb-4 bg-white text-teal-500 -px-4 py-2 hover:text-teal-600 transition duration-300 cursor-pointer">
               <div className=''>
                 <FaCirclePlus className='w-8 h-8' />
               </div>
               Add Activity
-            </NavLink>
+            </div>
             <div className="space-y-6">
               <div className="flex">
                 <div className="flex-shrink-0 mt-1">
@@ -207,6 +217,12 @@ const ClientDetails = () => {
       <QuickResponseModal
         isOpen={isResponseModalOpen}
         onClose={closeResponseModal}
+      />
+
+      <AddActivityModal
+        isOpen={isAddActivityModalOpen}
+        onClose={closeAddActivityModal}
+        clientName="Rohan Singh"
       />
     </div>
   );

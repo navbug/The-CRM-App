@@ -23,8 +23,37 @@ const contentSlice = createSlice({
         lastSent: "Jul 14, 2024 - 12:56 AM",
       }
     ],
-    files: [],
-    pages: [],
+    files: [
+      {
+        id: 12345,
+        title: "Internal Designs for Home",
+        url: "",
+        type: "application/pdf",
+        sharedTimes: 2,
+        lastShared: "Jul 15, 2024 - 12:56 AM",
+        createdOn: "Jul 12, 2024 - 11:56 AM",
+      },
+      {
+        id: 12346,
+        title: "ABC Residences Brochure",
+        url: "",
+        type: "application/pdf",
+        sharedTimes: 0,
+        lastShared: "Jul 15, 2024 - 12:56 AM",
+        createdOn: "Jul 12, 2024 - 11:56 AM"
+      }
+    ],
+    pages: [
+      {
+        id: 22346,
+        title: "Example: ABC Residences",
+        imageUrl: "",
+        type: "application/pdf",
+        sharedTimes: 1,
+        lastShared: "Jul 15, 2024 - 12:56 AM",
+        createdOn: "Jul 12, 2024 - 11:56 AM"
+      }
+    ],
   },
   reducers: {
     addMessage: (state, action) => {

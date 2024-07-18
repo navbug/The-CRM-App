@@ -16,7 +16,7 @@ const MessageTemplate = () => {
       <header className="mb-6">
         <div className="flex justify-between items-center mb-4">
           <nav className="text-sm flex items-center">
-            <NavLink to="/content" className="text-gray-600 hover:text-gray-700 underline font-bold">Content</NavLink>
+            <NavLink to="/content/messages" className="text-gray-600 hover:text-gray-700 underline font-bold">Content</NavLink>
             <span className="mx-2 text-gray-600">
               <FaGreaterThan className='w-[8px] h-[10px]' />
             </span>

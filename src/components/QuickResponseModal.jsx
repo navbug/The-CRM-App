@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import MessagesTab from "./MessagesTab";
-import MessagePreview from "./MessagePreview";
 import FilesTab from "./FilesTab";
 import PagesTab from "./PagesTab";
+import MessagePreview from "./MessagePreview";
+import FilePreview from "./FilePreview";
+import PagePreview from "./PagePreview";
+import SendingModal from './SendingModal';
 
 const QuickResponseModal = ({ isOpen, onClose, clientName }) => {
   const [tabs, setTabs] = useState(["Messages", "Files", "Pages"]);
   const [activeTab, setActiveTab] = useState('Messages');
   const [selectedOption, setSelectedOption] = useState('WhatsApp');
   const [selectedMessage, setSelectedMessage] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedPage, setSelectedPage] = useState(null);
+  const [isSending, setIsSending] = useState(false);
 
   const handleSelectMessage = (message) => {
     setSelectedMessage(message);
@@ -20,9 +26,25 @@ const QuickResponseModal = ({ isOpen, onClose, clientName }) => {
 
   const handleSendMessage = () => {
     // Implement send functionality here
-    console.log('Sending message:', selectedMessage);
-    onClose();
+    // console.log('Sending message:', selectedMessage);
+    // onClose();
+    setIsSending(true);
   };
+
+  const handleSelectFile = (file) => {
+    setSelectedFile(file);
+  };
+
+  const handleSelectPage = (page) => {
+    setSelectedPage(page);
+  };
+
+  const resetModal = () => {
+    setSelectedMessage(null);
+    setSelectedFile(null);
+    setSelectedPage(null);
+    setIsSending(false);
+  }
 
   if (!isOpen) return null;
 
@@ -39,7 +61,7 @@ const QuickResponseModal = ({ isOpen, onClose, clientName }) => {
           </svg>
         </button>
         {/* Left Section */}
-        <div className="w-1/4 bg-gray-100 p-6 border-r">
+        {!isSending && <div className="w-1/4 bg-gray-100 p-6 border-r">
           <h2 className="text-xl font-semibold text-gray-700">Send Quick Response to</h2>
           <h1 className="text-2xl font-bold text-blue-600 mt-2">{clientName}</h1>
           <p className="text-sm text-gray-500">(rohan)</p>
@@ -65,18 +87,30 @@ const QuickResponseModal = ({ isOpen, onClose, clientName }) => {
               ))}
             </div>
           </div>
-        </div>
+        </div>}
 
         {/* Right Section */}
-        <div className="w-3/4 flex flex-col">
-          {!selectedMessage ? (
+        <div className={`${!isSending && "w-3/4"} w-full flex flex-col`}>
+          {isSending ? (
+            <SendingModal
+              onBack={() => setIsSending(false)}
+              onClose={onClose}
+              selectedOption={selectedOption}
+              message={selectedMessage || selectedFile || selectedPage}
+              resetModal={resetModal}
+              recipient={{
+                name: clientName,
+                phone: '+917878496574',
+                email: 'pagdi@raj.com'
+              }}
+            />
+          ) : !selectedMessage && !selectedFile && !selectedPage ? (
             <>
               <div className="flex border-b">
                 {tabs.map((tab) => (
                   <button
                     key={tab}
-                    className={`px-4 py-2 ${activeTab === tab ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'
-                      }`}
+                    className={`px-4 py-2 ${activeTab === tab ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'}`}
                     onClick={() => setActiveTab(tab)}
                   >
                     {tab}
@@ -84,22 +118,39 @@ const QuickResponseModal = ({ isOpen, onClose, clientName }) => {
                 ))}
               </div>
               <div className="flex-grow overflow-y-auto p-4">
-                {activeTab === 'Messages' && <MessagesTab onSelectMessage={handleSelectMessage}/>}
-                {activeTab === 'Files' && <FilesTab />}
-                {activeTab === 'Pages' && <PagesTab />}
+                {activeTab === 'Messages' && <MessagesTab onSelectMessage={handleSelectMessage} />}
+                {activeTab === 'Files' && <FilesTab onSelectFile={handleSelectFile} />}
+                {activeTab === 'Pages' && <PagesTab onSelectPage={handleSelectPage} />}
               </div>
             </>
           ) : (
             <div className='p-6'>
-              <MessagePreview
-                message={selectedMessage}
-                onBack={handleBackToMessages}
-                onSend={handleSendMessage}
-                selectedOption={selectedOption}
-              />
+              {selectedMessage && (
+                <MessagePreview
+                  message={selectedMessage}
+                  onBack={handleBackToMessages}
+                  onSend={handleSendMessage}
+                  selectedOption={selectedOption}
+                />
+              )}
+              {selectedFile && (
+                <FilePreview
+                  file={selectedFile}
+                  onBack={() => setSelectedFile(null)}
+                  onSend={handleSendMessage}
+                  selectedOption={selectedOption}
+                />
+              )}
+              {selectedPage && (
+                <PagePreview
+                  page={selectedPage}
+                  onBack={() => setSelectedPage(null)}
+                  onSend={handleSendMessage}
+                  selectedOption={selectedOption}
+                />
+              )}
             </div>
           )}
-
         </div>
       </div>
     </div>

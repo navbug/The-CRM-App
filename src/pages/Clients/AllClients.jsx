@@ -7,14 +7,6 @@ const AllClients = () => {
   const [selectedGroup, setSelectedGroup] = useState('All Groups');
   const clientInfo = useSelector((state) => state.client.clientInfo);
   const navigate = useNavigate();
-
-  const handleClient = (id) => {
-
-  }
-
-  // useEffect(() => {
-
-  // }, []);
   
   return (
     <div>

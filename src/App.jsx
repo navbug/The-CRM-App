@@ -16,12 +16,24 @@ import Messages from './pages/Content/Messages';
 import Files from './pages/Content/Files';
 import Pages from './pages/Content/Pages';
 import MessageTemplate from './pages/Content/MessageTemplate';
+import FileDetails from './pages/Content/FileDetails';
+import PageDetails from './pages/Content/PageDetails';
+import CreateEditPage from './pages/Content/CreateEditPage';
+import TeamLayout from './pages/Team/TeamLayout';
+import TeamDashboard from './pages/Team/TeamDashboard';
+import TeamMembers from './pages/Team/TeamMembers';
+import LeadAssignment from './pages/Team/LeadAssignment';
+import IntegrationsLayout from './pages/Integrations/IntegrationsLayout';
+import LeadSources from './pages/Integrations/LeadSources';
+import ImportExportClients from './pages/Integrations/ImportExportClients';
+import GameOfLife from './components/GameOfLife';
 
 const App = () => {
   const location = useLocation();
 
   return (
     <div>
+      {/* <GameOfLife /> */}
       {location.pathname !== '/login' && <Header />}
       {/* Later: Add Suspense  */}
       <Routes>
@@ -42,6 +54,20 @@ const App = () => {
 
         <Route path='/client/:id' element={<ClientDetails />} />
         <Route path="/content/message/:id" element={<MessageTemplate />} />
+        <Route path="/content/file/:id" element={<FileDetails />} />
+        <Route path="/content/page/:id" element={<PageDetails />} />
+        <Route path="/content/pages/new" element={<CreateEditPage />} />
+
+        <Route path="/team" element={<TeamLayout />}>
+          <Route index path='dashboard' element={<TeamDashboard />} />
+          <Route path="manage" element={<TeamMembers />} />
+          <Route path="lead-assignment" element={<LeadAssignment />} />
+        </Route>
+
+        <Route path="/integrations" element={<IntegrationsLayout />} >
+          <Route index path='' element={<LeadSources />} />
+          <Route path='other' element={<ImportExportClients />} />
+        </Route>
 
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
