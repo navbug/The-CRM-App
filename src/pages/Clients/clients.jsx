@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { clientTabs } from '../../constants';
 import AddClientModal from '../../components/AddClientModel';
+import { FaPlus } from 'react-icons/fa';
 
 const Clients = () => {
   const location = useLocation();
@@ -14,9 +15,9 @@ const Clients = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-4xl font-bold">Clients</h1>
-        <button onClick={openModal} className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
+        <button onClick={openModal} className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out flex items-center gap-1"
         >
-          + ADD NEW CLIENT
+          <FaPlus /> ADD NEW CLIENT
         </button>
       </div>
 

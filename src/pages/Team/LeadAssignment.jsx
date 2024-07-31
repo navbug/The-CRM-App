@@ -1,57 +1,5 @@
 import React, { useState } from 'react'
 
-const LeadSourceInfo = () => (
-  <div className="mb-6">
-    <p className="text-sm sm:text-base text-gray-700 mb-2">
-      When a new lead is received, you can automatically assign them to your team members or leave them as unassigned. This applies to new leads received across all your lead sources, such as your website, Facebook Lead Ads, Google Ad Lead Forms, and other integrations such as Zapier.
-    </p>
-    <a href="#" className="text-sm sm:text-base text-blue-600 hover:underline">
-      View your Lead Source Integrations &gt;
-    </a>
-  </div>
-);
-
-const AssignmentRuleSelector = ({ assignmentRule, setAssignmentRule }) => (
-  <div className="mb-6">
-    <h3 className="text-base sm:text-lg font-semibold mb-4">NEW LEAD ASSIGNMENT RULE</h3>
-    <p className="mb-4 text-sm sm:text-base">When a new lead is received, do this:</p>
-    <div className="space-y-4">
-      <label className="flex items-start">
-        <input
-          type="radio"
-          name="assignmentRule"
-          value="unassigned"
-          checked={assignmentRule === 'unassigned'}
-          onChange={() => setAssignmentRule('unassigned')}
-          className="mt-1 mr-2"
-        />
-        <div>
-          <span className="font-medium text-sm sm:text-base">Leave Unassigned</span>
-          <p className="text-xs sm:text-sm text-gray-600">
-            New leads will be left unassigned. All team members with access to 'unassigned leads' will receive an alert, and the first person to claim the lead will be assigned to it
-          </p>
-        </div>
-      </label>
-      <label className="flex items-start">
-        <input
-          type="radio"
-          name="assignmentRule"
-          value="automatic"
-          checked={assignmentRule === 'automatic'}
-          onChange={() => setAssignmentRule('automatic')}
-          className="mt-1 mr-2"
-        />
-        <div>
-          <span className="font-medium text-sm sm:text-base">Automatically Assign to Team Member(s)</span>
-          <p className="text-xs sm:text-sm text-gray-600">
-            Assign leads to selected team members in a round robin distribution. Only the assigned team member will receive an alert for each new lead
-          </p>
-        </div>
-      </label>
-    </div>
-  </div>
-);
-
 const TeamMemberTable = ({ teamMembers, setTeamMembers }) => {
   const toggleAssignLeads = (index) => {
     const updatedMembers = [...teamMembers];
@@ -128,14 +76,8 @@ const LeadAssignment = () => {
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6">
       <h2 className="text-xl sm:text-2xl font-bold mb-4">Lead Assignment</h2>
-      <LeadSourceInfo />
-      <AssignmentRuleSelector assignmentRule={assignmentRule} setAssignmentRule={setAssignmentRule} />
       {assignmentRule === 'automatic' && (
         <div>
-          <h3 className="text-base sm:text-lg font-semibold mb-4">ASSIGNING LEADS TO {teamMembers.length} TEAM MEMBERS</h3>
-          <p className="mb-4 text-sm sm:text-base">
-            Leads will be distributed amongst recipients in a round-robin fashion. You can edit a recipient's LEADS/ROUND value to change the number of leads they should receive each round.
-          </p>
           <TeamMemberTable teamMembers={teamMembers} setTeamMembers={setTeamMembers} />
         </div>
       )}

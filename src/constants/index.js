@@ -25,8 +25,15 @@ export const teamTabs = [
 ];
 
 export const integrationsTabs = [
-    { name: 'Lead Sources', path: '/integrations/' },
+    { name: 'Lead Sources', path: '/integrations' },
     { name: 'Import/Export Clients', path: '/integrations/other' },
+];
+
+export const navigationTabs = [
+    { name: 'Dashboard', path: '/admin/dashboard' },
+    { name: 'Users', path: '/admin/dashboard/users' },
+    { name: 'Content', path: '/admin/dashboard/content' },
+    { name: 'Teams', path: '/admin/dashboard/teams' },
 ];
 
 export const integrations = [

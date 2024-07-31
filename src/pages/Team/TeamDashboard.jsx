@@ -1,5 +1,3 @@
-
-
 const StatCard = ({ title, value, subtext, infoIcon }) => (
   <div className="bg-white p-6 rounded-lg shadow-sm">
     <div className="flex justify-between items-start mb-2">

@@ -1,4 +1,7 @@
 import React from 'react';
+import { FaWhatsapp } from 'react-icons/fa';
+import { IoIosArrowBack } from 'react-icons/io';
+import { IoSend } from "react-icons/io5";
 
 const PagePreview = ({ page, onBack, onSend, selectedOption }) => {
   return (
@@ -6,11 +9,9 @@ const PagePreview = ({ page, onBack, onSend, selectedOption }) => {
       <div className="flex items-center mb-6">
         <button 
           onClick={onBack}
-          className="text-teal-500 hover:text-teal-600 flex items-center text-sm font-medium"
+          className="text-teal-500 hover:text-teal-600 flex items-center text-sm font-medium gap-2"
         >
-          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
-          </svg>
+          <IoIosArrowBack className='text-lg'/>
           BACK
         </button>
       </div>
@@ -20,7 +21,7 @@ const PagePreview = ({ page, onBack, onSend, selectedOption }) => {
       </div>
       
       <div className="flex-grow overflow-y-auto">
-        <img src={page.image} alt={page.title} className="w-full mb-4 rounded-md" />
+        <img src="https://via.placeholder.com/60x50" alt={page.title} className="mb-4 rounded-md" />
         <div className="text-sm text-gray-700">
           {page.description}
         </div>
@@ -35,8 +36,9 @@ const PagePreview = ({ page, onBack, onSend, selectedOption }) => {
       </div>
       
       <button 
-        className="bg-teal-500 text-white px-4 py-3 rounded-md hover:bg-teal-600 transition duration-300 mt-6 flex items-center justify-center text-sm font-medium"
+        className="bg-teal-500 text-white px-4 py-3 rounded-md hover:bg-teal-600 transition duration-300 mt-6 flex items-center justify-center text-sm font-medium gap-2"
       >
+        <IoSend className='w-4 h-4'/>
         SEND VIA {selectedOption.toUpperCase()}
       </button>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaPhoneAlt, FaCommentAlt, FaCalendarAlt, FaStickyNote, FaTimes } from 'react-icons/fa';
+import { FaPhoneAlt, FaCommentAlt, FaCalendarAlt, FaStickyNote, FaTimes, FaAngleDown, FaSave } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -46,9 +46,7 @@ const AddActivityModal = ({ isOpen, onClose, clientName }) => {
                   ))}
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                  </svg>
+                  <FaAngleDown />
                 </div>
               </div>
             </div>
@@ -56,7 +54,7 @@ const AddActivityModal = ({ isOpen, onClose, clientName }) => {
             <textarea
               value={activityDetails}
               onChange={(e) => setActivityDetails(e.target.value)}
-              placeholder="Add optional details here..."
+              placeholder="Details here(optional)..."
               className="w-full mt-4 p-2 border rounded-md resize-none h-32"
             />
             <div className="mt-4 w-full">
@@ -65,16 +63,19 @@ const AddActivityModal = ({ isOpen, onClose, clientName }) => {
                 onChange={(date) => setActivityDate(date)}
                 showTimeSelect
                 timeFormat="HH:mm"
-                timeIntervals={15}
+                timeIntervals={30}
                 timeCaption="Time"
                 dateFormat="MMMM d, yyyy h:mm aa"
                 className="w-full p-2 border rounded-md"
               />
             </div>
             <button
-              onClick={() => {/* Handle save */ }}
-              className="w-full mt-4 bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition duration-300"
+              onClick={() => {
+                /* Handle save */ 
+              }}
+              className="w-full mt-4 bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition duration-300 flex justify-center items-center gap-2"
             >
+              <FaSave />
               SAVE
             </button>
           </div>
