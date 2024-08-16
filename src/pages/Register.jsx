@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import axios from "axios";
 import Logo from "../assets/icons/privyr_logo.svg";
 import { FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/reducers/userReducer";
+import { API_BASE_URL } from "../../config";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -14,20 +17,37 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const registerUser = async (e) => {
     e.preventDefault();
 
-    // Simulate register with email and password
-    let userData = {
-      username: username,
-      email: email,
-      password: password,
+    const userData = {
+      name: username,
+      email,
+      password,
     };
-    dispatch(setUser(userData));
-    navigate("/login");
 
-    console.log("Login submitted with email:", email, password);
+    try {
+      const result = await axios.post(
+        `${API_BASE_URL}/register`,
+        userData
+      );
+
+      if (result.status === 201) {
+        console.log("register successful", result.data);
+      }
+      // setName("");
+      // setEmail("");
+      // setPassword("");
+
+      navigate("/login");
+    } catch (error) {
+      console.log("registration failed", error);
+    }
   };
+
+  const googleLogin = () => {
+    window.location.href = `http://localhost:4000/auth/google`;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-4">
@@ -37,7 +57,10 @@ const Register = () => {
           Register to Privyr
         </h2>
 
-        <button className="w-full bg-blue-600 font-semibold text-white py-2 px-4 rounded-md my-6 flex items-center justify-center hover:bg-opacity-90 transition duration-300">
+        <button
+          onClick={googleLogin}
+          className="w-full bg-blue-600 font-semibold text-white py-2 px-4 rounded-md my-6 flex items-center justify-center hover:bg-opacity-90 transition duration-300"
+        >
           Register with Google
           <FaGoogle className="h-6 w-6 text-white ml-2" />
         </button>
@@ -46,7 +69,7 @@ const Register = () => {
           <span className="px-4 text-gray-500">OR</span>
           <div className="flex-grow border-t border-gray-300"></div>
         </div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={registerUser}>
           <div className="mb-4">
             <label
               htmlFor="username"

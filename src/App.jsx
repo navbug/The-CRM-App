@@ -26,69 +26,69 @@ import LeadAssignment from "./pages/Team/LeadAssignment";
 import IntegrationsLayout from "./pages/Integrations/IntegrationsLayout";
 import LeadSources from "./pages/Integrations/LeadSources";
 import ImportExportClients from "./pages/Integrations/ImportExportClients";
-import GameOfLife from "./components/GameOfLife";
 import DashboardLayout from "./pages/Admin/DashboardLayout";
 import Dashboard from "./pages/Admin/Dashboard";
 import ManageUsers from "./pages/Admin/ManageUsers";
 import ManageContent from "./pages/Admin/ManageContent";
 import ManageTeams from "./pages/Admin/ManageTeams";
 import Register from "./pages/Register";
-
+import Profile from "./pages/Profile";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const App = () => {
   const location = useLocation();
 
   return (
-    <div>
-      {/* <GameOfLife /> */}
-      {/* <Header /> */}
-      {!location.pathname.includes("admin") && <Header />}
-      {/* Later: Add Suspense  */}
-      <Routes>
-        <Route path="/" element={<PublicRoute />} />
-        <Route path="/login" element={<SignIn />} />
-        <Route path="/register" element={<Register />} />
+      <div>
+        {/* <Header /> */}
+        {!location.pathname.includes("admin") && <Header />}
+        {/* Later: Add Suspense  */}
+        <Routes>
+          <Route path="/" element={<PublicRoute />} />
+          <Route path="/login" element={<SignIn />} />
+          <Route path="/register" element={<Register />} />
 
-        <Route path="/clients" element={<Clients />}>
-          <Route index element={<AllClients />} />
-          <Route path="uncontacted" element={<Uncontacted />} />
-          <Route path="follow-ups" element={<FollowUps />} />
-          <Route path="recently-viewed" element={<RecentlyViewed />} />
-        </Route>
-        <Route path="/content" element={<Content />}>
-          <Route index path="messages" element={<Messages />} />
-          <Route path="files" element={<Files />} />
-          <Route path="pages" element={<Pages />} />
-        </Route>
+          <Route path="/clients" element={<Clients />}>
+            <Route index element={<AllClients />} />
+            <Route path="uncontacted" element={<Uncontacted />} />
+            <Route path="follow-ups" element={<FollowUps />} />
+            <Route path="recently-viewed" element={<RecentlyViewed />} />
+          </Route>
+          <Route path="/content" element={<Content />}>
+            <Route index path="messages" element={<Messages />} />
+            <Route path="files" element={<Files />} />
+            <Route path="pages" element={<Pages />} />
+          </Route>
 
-        <Route path="/client/:id" element={<ClientDetails />} />
-        <Route path="/content/message/:id" element={<MessageTemplate />} />
-        <Route path="/content/file/:id" element={<FileDetails />} />
-        <Route path="/content/page/:id" element={<PageDetails />} />
-        <Route path="/content/pages/new" element={<CreateEditPage />} />
+          <Route path="/client/:id" element={<ClientDetails />} />
+          <Route path="/content/message/:id" element={<MessageTemplate />} />
+          <Route path="/content/file/:id" element={<FileDetails />} />
+          <Route path="/content/page/:id" element={<PageDetails />} />
+          <Route path="/content/pages/new" element={<CreateEditPage />} />
 
-        <Route path="/team" element={<TeamLayout />}>
-          <Route index path="dashboard" element={<TeamDashboard />} />
-          <Route path="manage" element={<TeamMembers />} />
-          <Route path="lead-assignment" element={<LeadAssignment />} />
-        </Route>
+          <Route path="/team" element={<TeamLayout />}>
+            <Route index path="dashboard" element={<TeamDashboard />} />
+            <Route path="manage" element={<TeamMembers />} />
+            <Route path="lead-assignment" element={<LeadAssignment />} />
+          </Route>
 
-        <Route path="/integrations" element={<IntegrationsLayout />}>
-          <Route index path="" element={<LeadSources />} />
-          <Route path="other" element={<ImportExportClients />} />
-        </Route>
+          <Route path="/integrations" element={<IntegrationsLayout />}>
+            <Route index path="" element={<LeadSources />} />
+            <Route path="other" element={<ImportExportClients />} />
+          </Route>
 
-        <Route path="/admin/dashboard" element={<DashboardLayout />}>
-          <Route index path="" element={<Dashboard />} />
-          <Route path="Users" element={<ManageUsers />} />
-          <Route path="Content" element={<ManageContent />} />
-          <Route path="Teams" element={<ManageTeams />} />
-        </Route>
-        {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}
+          <Route path="/admin/dashboard" element={<DashboardLayout />}>
+            <Route index path="" element={<Dashboard />} />
+            <Route path="Users" element={<ManageUsers />} />
+            <Route path="Content" element={<ManageContent />} />
+            <Route path="Teams" element={<ManageTeams />} />
+          </Route>
 
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </div>
+          <Route path="/account/profile" element={<Profile />} />
+
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </div>
   );
 };
 

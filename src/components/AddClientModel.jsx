@@ -1,12 +1,25 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addClient } from '../redux/reducers/clientReducer';
-import { formatDateAdded } from '../utils';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addClient } from "../redux/reducers/clientReducer";
+import { formatDateAdded } from "../utils";
+import { FaTimes } from "react-icons/fa";
 
-const InputField = ({ label, name, type, placeholder, required, value, onChange }) => (
+const InputField = ({
+  label,
+  name,
+  type,
+  placeholder,
+  required,
+  value,
+  onChange,
+}) => (
   <div className="mb-4">
-    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={name}>
-      {label}{required && <span className="text-red-500">*</span>}
+    <label
+      className="block text-gray-700 text-sm font-bold mb-2"
+      htmlFor={name}
+    >
+      {label}
+      {required && <span className="text-red-500">*</span>}
     </label>
     <input
       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -32,14 +45,27 @@ const CountryCodeSelect = ({ value, onChange, name }) => (
   </select>
 );
 
-const PhoneInputField = ({ label, name, required, countryCodeName, value, countryCodeValue, onInputChange, onCountryCodeChange }) => (
+const PhoneInputField = ({
+  label,
+  name,
+  required,
+  countryCodeName,
+  value,
+  countryCodeValue,
+  onInputChange,
+  onCountryCodeChange,
+}) => (
   <div className="mb-4">
-    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={name}>
-      {label}{required && <span className="text-red-500">*</span>}
+    <label
+      className="block text-gray-700 text-sm font-bold mb-2"
+      htmlFor={name}
+    >
+      {label}
+      {required && <span className="text-red-500">*</span>}
     </label>
     <div className="relative">
-      <CountryCodeSelect 
-        value={countryCodeValue} 
+      <CountryCodeSelect
+        value={countryCodeValue}
         onChange={onCountryCodeChange}
         name={countryCodeName}
       />
@@ -56,15 +82,15 @@ const PhoneInputField = ({ label, name, required, countryCodeName, value, countr
   </div>
 );
 
-const AddClientModal = ({ isOpen, onClose }) => {
+const AddClientModal = ({ isOpen, onClose, addClient }) => {
   const [clientDetails, setClientDetails] = useState({
-    clientName: '',
-    displayName: '',
-    mobileNumber: '',
-    whatsappNumber: '',
-    email: '',
-    mobileCountryCode: '+91',
-    whatsappCountryCode: '+91'
+    clientName: "",
+    displayName: "",
+    phoneNumber: "",
+    whatsappNumber: "",
+    email: "",
+    mobileCountryCode: "+91",
+    whatsappCountryCode: "+91",
   });
   const clientInfo = useSelector((state) => state.client.clientInfo);
   const dispatch = useDispatch();
@@ -73,16 +99,16 @@ const AddClientModal = ({ isOpen, onClose }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setClientDetails(prevDetails => ({
+    setClientDetails((prevDetails) => ({
       ...prevDetails,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleCountryCodeChange = (field, value) => {
-    setClientDetails(prevDetails => ({
+    setClientDetails((prevDetails) => ({
       ...prevDetails,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -90,26 +116,28 @@ const AddClientModal = ({ isOpen, onClose }) => {
     e.preventDefault();
 
     const newClientDetails = {
-        ...clientDetails,
-        id: Date.now(),
-        dateAdded: formatDateAdded(new Date()),
-        lastActivity: "",
-        notes: "",
-        groups: [],
-        activity: [],
-        contacted: false
-      };
+      ...clientDetails,
+      id: Date.now(),
+      dateAdded: formatDateAdded(new Date()),
+      lastActivity: "",
+      notes: "",
+      groups: [],
+      activity: [],
+      contacted: false,
+    };
 
-    dispatch(addClient(newClientDetails));
+    addClient(newClientDetails);
+
+    // dispatch(addClient(newClientDetails));
     console.log(newClientDetails);
     setClientDetails({
-        clientName: '',
-        displayName: '',
-        mobileNumber: '',
-        whatsappNumber: '',
-        email: '',
-        mobileCountryCode: '+91',
-        whatsappCountryCode: '+91'
+      clientName: "",
+      displayName: "",
+      phoneNumber: "",
+      whatsappNumber: "",
+      email: "",
+      mobileCountryCode: "+91",
+      whatsappCountryCode: "+91",
     });
 
     onClose();
@@ -121,11 +149,14 @@ const AddClientModal = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
       <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
         <div className="flex justify-between items-center pb-3">
-          <h3 className="text-xl font-semibold text-gray-900">Add New Client</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-500">
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+          <h3 className="text-xl font-semibold text-gray-900">
+            Add New Client
+          </h3>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-500"
+          >
+            <FaTimes className="w-6 h-6"/>
           </button>
         </div>
 
@@ -152,10 +183,10 @@ const AddClientModal = ({ isOpen, onClose }) => {
           </p>
           <PhoneInputField
             label="Mobile Number"
-            name="mobileNumber"
+            name="phoneNumber"
             required
             countryCodeName="mobileCountryCode"
-            value={clientDetails.mobileNumber}
+            value={clientDetails.phoneNumber}
             countryCodeValue={clientDetails.mobileCountryCode}
             onInputChange={handleInputChange}
             onCountryCodeChange={handleCountryCodeChange}
