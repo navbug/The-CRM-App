@@ -6,6 +6,8 @@ import { contentTabs } from '../../constants';
 import NewMessageTemplateModal from '../../components/NewMessageTemplateModal';
 import FileUploadModal from '../../components/FileUploadModal';
 import { MdFileUpload } from 'react-icons/md';
+import { API_BASE_URL } from '../../../config';
+import axios from 'axios';
 
 const Content = () => {
   const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
@@ -44,6 +46,22 @@ const Content = () => {
     }
   };
 
+  const handleAddMessage = async (message) => {
+    console.log(message);
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/content/message`,
+        message,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      if(response.status === 201) {
+        console.log("MESSAGE ADDED");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
@@ -75,7 +93,8 @@ const Content = () => {
 
       <NewMessageTemplateModal 
         isOpen={isMessageModalOpen} 
-        onClose={handleCloseMessageModal} 
+        onClose={handleCloseMessageModal}
+        addMessage={handleAddMessage}
       />
       <FileUploadModal 
         isOpen={isFileModalOpen} 

@@ -1,48 +1,47 @@
-import React from "react";
-import Header from "./components/Header";
+import React, { lazy, Suspense } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
-import SignIn from "./pages/SignIn";
-import Clients from "./pages/Clients/clients";
-import Content from "./pages/Content/Content";
-import Uncontacted from "./pages/Clients/Uncontacted";
-import FollowUps from "./pages/Clients/FollowUps";
-import RecentlyViewed from "./pages/Clients/RecentlyViewed";
-import AllClients from "./pages/Clients/AllClients";
-import ProtectedRoute from "./routes/ProtectedRoute";
-import NotFoundPage from "./pages/NotFoundPage";
-import PublicRoute from "./routes/PublicRoute";
-import ClientDetails from "./pages/Clients/ClientDetails";
-import Messages from "./pages/Content/Messages";
-import Files from "./pages/Content/Files";
-import Pages from "./pages/Content/Pages";
-import MessageTemplate from "./pages/Content/MessageTemplate";
-import FileDetails from "./pages/Content/FileDetails";
-import PageDetails from "./pages/Content/PageDetails";
-import CreateEditPage from "./pages/Content/CreateEditPage";
-import TeamLayout from "./pages/Team/TeamLayout";
-import TeamDashboard from "./pages/Team/TeamDashboard";
-import TeamMembers from "./pages/Team/TeamMembers";
-import LeadAssignment from "./pages/Team/LeadAssignment";
-import IntegrationsLayout from "./pages/Integrations/IntegrationsLayout";
-import LeadSources from "./pages/Integrations/LeadSources";
-import ImportExportClients from "./pages/Integrations/ImportExportClients";
-import DashboardLayout from "./pages/Admin/DashboardLayout";
-import Dashboard from "./pages/Admin/Dashboard";
-import ManageUsers from "./pages/Admin/ManageUsers";
-import ManageContent from "./pages/Admin/ManageContent";
-import ManageTeams from "./pages/Admin/ManageTeams";
-import Register from "./pages/Register";
-import Profile from "./pages/Profile";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+import Header from "./components/Header";
+
+// Lazy load components
+const SignIn = lazy(() => import("./pages/SignIn"));
+const Clients = lazy(() => import("./pages/Clients/clients"));
+const Content = lazy(() => import("./pages/Content/Content"));
+const Uncontacted = lazy(() => import("./pages/Clients/Uncontacted"));
+const FollowUps = lazy(() => import("./pages/Clients/FollowUps"));
+const RecentlyViewed = lazy(() => import("./pages/Clients/RecentlyViewed"));
+const AllClients = lazy(() => import("./pages/Clients/AllClients"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const PublicRoute = lazy(() => import("./routes/PublicRoute"));
+const ClientDetails = lazy(() => import("./pages/Clients/ClientDetails"));
+const Messages = lazy(() => import("./pages/Content/Messages"));
+const Files = lazy(() => import("./pages/Content/Files"));
+const Pages = lazy(() => import("./pages/Content/Pages"));
+const MessageTemplate = lazy(() => import("./pages/Content/MessageTemplate"));
+const FileDetails = lazy(() => import("./pages/Content/FileDetails"));
+const PageDetails = lazy(() => import("./pages/Content/PageDetails"));
+const CreateEditPage = lazy(() => import("./pages/Content/CreateEditPage"));
+const TeamLayout = lazy(() => import("./pages/Team/TeamLayout"));
+const TeamDashboard = lazy(() => import("./pages/Team/TeamDashboard"));
+const TeamMembers = lazy(() => import("./pages/Team/TeamMembers"));
+const LeadAssignment = lazy(() => import("./pages/Team/LeadAssignment"));
+const IntegrationsLayout = lazy(() => import("./pages/Integrations/IntegrationsLayout"));
+const LeadSources = lazy(() => import("./pages/Integrations/LeadSources"));
+const ImportExportClients = lazy(() => import("./pages/Integrations/ImportExportClients"));
+const DashboardLayout = lazy(() => import("./pages/Admin/DashboardLayout"));
+const Dashboard = lazy(() => import("./pages/Admin/Dashboard"));
+const ManageUsers = lazy(() => import("./pages/Admin/ManageUsers"));
+const ManageContent = lazy(() => import("./pages/Admin/ManageContent"));
+const ManageTeams = lazy(() => import("./pages/Admin/ManageTeams"));
+const Register = lazy(() => import("./pages/Register"));
+const Profile = lazy(() => import("./pages/Profile"));
 
 const App = () => {
   const location = useLocation();
 
   return (
-      <div>
-        {/* <Header /> */}
-        {!location.pathname.includes("admin") && <Header />}
-        {/* Later: Add Suspense  */}
+    <div>
+      {!location.pathname.includes("admin") && <Header />}
+      <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route path="/" element={<PublicRoute />} />
           <Route path="/login" element={<SignIn />} />
@@ -88,7 +87,8 @@ const App = () => {
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
-      </div>
+      </Suspense>
+    </div>
   );
 };
 

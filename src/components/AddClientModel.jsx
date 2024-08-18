@@ -92,10 +92,6 @@ const AddClientModal = ({ isOpen, onClose, addClient }) => {
     mobileCountryCode: "+91",
     whatsappCountryCode: "+91",
   });
-  const clientInfo = useSelector((state) => state.client.clientInfo);
-  const dispatch = useDispatch();
-
-  console.log(clientInfo);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

@@ -2,20 +2,27 @@ import React, { useState } from 'react';
 import { FaPhoneAlt, FaCommentAlt, FaCalendarAlt, FaStickyNote, FaTimes, FaAngleDown, FaSave } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { activityTypes } from '../constants';
 
-const AddActivityModal = ({ isOpen, onClose, clientName }) => {
+const AddActivityModal = ({ isOpen, onClose, onAdd, clientName }) => {
   const [activityType, setActivityType] = useState('Note');
   const [activityDate, setActivityDate] = useState(new Date());
   const [activityDetails, setActivityDetails] = useState('');
 
-  const activityTypes = [
-    { value: 'Note', icon: FaStickyNote, color: 'bg-purple-500' },
-    { value: 'Phone Call', icon: FaPhoneAlt, color: 'bg-blue-500' },
-    { value: 'Message', icon: FaCommentAlt, color: 'bg-pink-500' },
-    { value: 'Meeting', icon: FaCalendarAlt, color: 'bg-indigo-500' },
-  ];
-
   const selectedActivity = activityTypes.find(type => type.value === activityType);
+
+  const handleSubmit = () => {
+    const activity = {
+      activityType,
+      activityDetails,
+      activityDate,
+    }
+    onAdd(activity);
+    setActivityType("Note");
+    setActivityDetails("");
+    setActivityDate(new Date());
+    onClose();
+  }
 
   if (!isOpen) return null;
 
@@ -70,9 +77,7 @@ const AddActivityModal = ({ isOpen, onClose, clientName }) => {
               />
             </div>
             <button
-              onClick={() => {
-                /* Handle save */ 
-              }}
+              onClick={handleSubmit}
               className="w-full mt-4 bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition duration-300 flex justify-center items-center gap-2"
             >
               <FaSave />
