@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from "react";
+import { fetchUsers, updateUser } from "../../api";
+import Loading from "../../components/Loading";
+import { PuffLoader } from "react-spinners";
 
 const TeamMemberTable = ({ teamMembers, setTeamMembers }) => {
-  const toggleAssignLeads = (index) => {
+  const toggleAssignLeads = async (index) => {
     const updatedMembers = [...teamMembers];
     updatedMembers[index].assignLeads = !updatedMembers[index].assignLeads;
     setTeamMembers(updatedMembers);
-  };
 
-  const updateLeadsPerRound = (index, value) => {
-    const updatedMembers = [...teamMembers];
-    updatedMembers[index].leadsPerRound = value;
-    setTeamMembers(updatedMembers);
+    //API call to update user in the backend
+    await updateUser(updatedMembers[index]._id, updatedMembers[index]);
   };
 
   return (
@@ -20,9 +20,9 @@ const TeamMemberTable = ({ teamMembers, setTeamMembers }) => {
           <tr className="bg-gray-100">
             <th className="px-4 py-2 text-left">NAME</th>
             <th className="px-4 py-2 text-left">ASSIGN LEADS</th>
-            <th className="px-4 py-2 text-left">LEADS/ROUND</th>
-            <th className="px-4 py-2 text-left hidden sm:table-cell">ROUND STATUS</th>
-            <th className="px-4 py-2 text-left hidden sm:table-cell">LAST LEAD RECEIVED</th>
+            <th className="px-4 py-2 text-left hidden sm:table-cell">
+              LAST LEAD RECEIVED
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -43,21 +43,9 @@ const TeamMemberTable = ({ teamMembers, setTeamMembers }) => {
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                 </label>
               </td>
-              <td className="px-4 py-2">
-                <select
-                  value={member.leadsPerRound}
-                  onChange={(e) => updateLeadsPerRound(index, parseInt(e.target.value))}
-                  className="border rounded px-2 py-1"
-                >
-                  {[1, 2, 3, 4, 5].map((num) => (
-                    <option key={num} value={num}>
-                      {num} lead{num > 1 ? 's' : ''}
-                    </option>
-                  ))}
-                </select>
+              <td className="px-4 py-2 hidden sm:table-cell">
+                {member.lastLeadReceived ? member.lastLeadReceived : "-"}
               </td>
-              <td className="px-4 py-2 hidden sm:table-cell">{member.roundStatus}</td>
-              <td className="px-4 py-2 hidden sm:table-cell">{member.lastLeadReceived}</td>
             </tr>
           ))}
         </tbody>
@@ -67,18 +55,40 @@ const TeamMemberTable = ({ teamMembers, setTeamMembers }) => {
 };
 
 const LeadAssignment = () => {
-  const [assignmentRule, setAssignmentRule] = useState('automatic');
-  const [teamMembers, setTeamMembers] = useState([
-    { name: 'ghost cube', email: 'ghostcube898@gmail.com', assignLeads: true, leadsPerRound: 1, roundStatus: '0 of 1 leads received', lastLeadReceived: '-' },
-    { name: 'onealias01@gmail.com', email: 'onealias01@gmail.com', assignLeads: true, leadsPerRound: 1, roundStatus: '0 of 1 leads received', lastLeadReceived: '-' },
-  ]);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const getAllUsers = async () => {
+    const fetchedUsers = await fetchUsers();
+    setUsers(fetchedUsers);
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getAllUsers();
+  }, []);
 
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6">
-      <h2 className="text-xl sm:text-2xl font-bold mb-4">Lead Assignment</h2>
-      {assignmentRule === 'automatic' && (
+      {loading && (
+        <Loading>
+          <PuffLoader color="#09e34f" speedMultiplier={3} />
+        </Loading>
+      )}
+      {!loading && users.length > 0 && (
         <div>
-          <TeamMemberTable teamMembers={teamMembers} setTeamMembers={setTeamMembers} />
+          <div className="flex items-center gap-1 relative">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4">
+              Lead Assignment{" "}
+            </h2>
+            <span className="text-md font-semibold absolute bottom-[18px] left-[196px]">
+              (Round Robin fashion)
+            </span>{" "}
+          </div>
+          <div>
+            <TeamMemberTable teamMembers={users} setTeamMembers={setUsers} />
+          </div>
         </div>
       )}
     </div>

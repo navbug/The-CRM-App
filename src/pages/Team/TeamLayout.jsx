@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { teamTabs } from '../../constants';
+import { fetchUsers } from '../../api';
 
 const TeamLayout = () => {
+  
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-start items-center mb-6">

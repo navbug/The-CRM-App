@@ -1,56 +1,153 @@
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { fetchClients } from "../../api";
+import { followUpTabs } from "../../constants";
+import Loading from "../../components/Loading";
+import { PuffLoader } from "react-spinners";
+import NoDataWrapper from "../../components/NoDataWrapper";
 
 const FollowUps = () => {
-  const clientInfo = useSelector((state) => state.client.clientInfo);
+  const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState({
+    dueToday: [],
+    upcoming: [],
+    overdue: [],
+  });
+  const [activeTab, setActiveTab] = useState("dueToday");
   const navigate = useNavigate();
 
+  const fetchAllClients = async () => {
+    let fetchedClients = await fetchClients();
+    setClients(fetchedClients);
+
+    setLoading(false);
+  };
+
+  const filteredClients = clients.filter(client => client.followUp);
+
+  useEffect(() => {
+    fetchAllClients();
+  }, []);
+
+  useEffect(() => {
+    categorizeClients();
+  }, [clients]);
+
+  const categorizeClients = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const categorizedClients = clients.reduce(
+      (acc, client) => {
+        if (client.followUp) {
+          const followUpDate = new Date(client.followUp);
+          if (followUpDate < today) {
+            acc.overdue.push(client);
+          } else if (followUpDate >= today && followUpDate < tomorrow) {
+            acc.dueToday.push(client);
+          } else {
+            acc.upcoming.push(client);
+          }
+        }
+        return acc;
+      },
+      { dueToday: [], upcoming: [], overdue: [] }
+    );
+
+    setCategories(categorizedClients);
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (date.toDateString() === today.toDateString()) {
+      return `Today - ${date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      })}`;
+    } else {
+      return date.toLocaleString("en-US", {
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+    }
+  };
+
   return (
-    <div>
-      <div className="p-4">
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
-          
-          {/* Calender bar  */}
-
-        </div>
-
-        <table className="w-full">
-          <thead>
-            <tr className="border-b">
-              <th className="text-left py-2 px-4 font-medium text-gray-500">FOLLOW UP
-                <svg
-                  className="inline-block ml-1 h-4 w-4 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </th>
-              <th className="text-left py-2 px-4 font-medium text-gray-500">NAME</th>
-              <th className="text-left py-2 px-4 font-medium text-gray-500">DETAILS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {clientInfo?.map((client, index) => (
-              <tr onClick={() => {
-                navigate(`/client/${client.id}`)
-              }} key={index} className="border-b hover:bg-gray-50 cursor-pointer">
-                <td className="py-3 px-4">{client.dateAdded}</td>
-                <td className="py-3 px-4">{client.clientName}</td>
-                <td className="py-3 px-4">-</td>
-              </tr>
+    <div className="p-4">
+      {loading && (
+        <Loading>
+          <PuffLoader color="#09e34f" speedMultiplier={3} />
+        </Loading>
+      )}
+      {!loading && filteredClients.length === 0 && (
+        <NoDataWrapper>No Clients</NoDataWrapper>
+      )}
+      {!loading && clients.length > 0 && (
+        <div>
+          <div className="flex mb-4 bg-white shadow rounded-lg overflow-hidden">
+            {followUpTabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`flex-1 py-2 px-4 font-medium ${
+                  activeTab === tab.key
+                    ? `bg-blue-50 ${tab.color}`
+                    : "text-gray-500 hover:bg-gray-50"
+                }`}
+              >
+                <div className="flex items-center justify-center">
+                  {tab.icon}
+                  {tab.label} ({categories[tab.key].length})
+                </div>
+              </button>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </div>
+          {categories[activeTab].length === 0 ? (<NoDataWrapper height="20">No Follow Ups</NoDataWrapper>) : (<div className="bg-white shadow rounded-lg overflow-hidden">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gray-50 border-b">
+                  <th className="text-left py-2 px-4 font-medium text-gray-500">
+                    FOLLOW UP
+                  </th>
+                  <th className="text-left py-2 px-4 font-medium text-gray-500">
+                    NAME
+                  </th>
+                  <th className="text-left py-2 px-4 font-medium text-gray-500">
+                    DETAILS
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {categories[activeTab].map((client) => (
+                  <tr
+                    key={client._id}
+                    onClick={() => navigate(`/client/${client._id}`)}
+                    className="hover:bg-gray-50 cursor-pointer"
+                  >
+                    <td className="py-3 px-4">{formatDate(client.followUp)}</td>
+                    <td className="py-3 px-4">{client.clientName}</td>
+                    <td className="py-3 px-4">
+                      {client.notes ? client.notes : "-"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>)}
+          
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
 export default FollowUps;

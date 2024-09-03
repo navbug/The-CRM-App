@@ -1,69 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { clientTabs } from "../../constants";
-import AddClientModal from "../../components/AddClientModel";
+import AddEditClientModal from "../../components/AddEditClientModel";
 import { FaPlus } from "react-icons/fa";
-import axios from "axios";
-import { API_BASE_URL } from "../../../config";
+import { addClient, fetchClients, getUser } from "../../api";
+import { useDispatch, useSelector } from "react-redux";
+import { setInitialClients } from "../../redux/reducers/clientReducer";
+import toast from "react-hot-toast";
 
 const Clients = () => {
-  const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const clientsInformation = useSelector(state => state.client.clientsInfo);
+  const dispatch = useDispatch();
+
+  console.log(clientsInformation);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await axios.get("http://localhost:4000/api/users/current_user", {
-          withCredentials: true,
-        });
-        console.log(res);
-        setUser(res.data);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      }
-    };
-    fetchUser();
-  }, []);
-
-  const handleLogout = async () => {
-    await axios.get("http://localhost:4000/api/users/logout", {
-      withCredentials: true,
-    });
-    setUser(null);
-  };
-
   const handleAddClient = async (clientInfo) => {
-    console.log(clientInfo);
-    try {
-      const response = await axios.post(
-        `${API_BASE_URL}/clients/new`,
-        clientInfo,
-        { headers: { "Content-Type": "application/json" } }
-      );
-      if(response.status === 201) {
-        console.log("CLIENT ADDED");
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    await addClient(clientInfo);
+    let fetchedClients = await fetchClients();
+    dispatch(setInitialClients(fetchedClients));
+
+    toast.success(`Added New Client 🔗`);
   };
-
-  useEffect(() => {}, []);
-
-  console.log(user);
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* {!user ? (<div>Loading...</div>) : (<div>
-      <h2>Welcome, {user.name}!</h2>
-      <p>Email: {user.email}</p>
-      <button onClick={handleLogout}>Logout</button>
-    </div>)} */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-4xl font-bold">Clients</h1>
         <button
@@ -96,7 +60,7 @@ const Clients = () => {
         <Outlet />
       </div>
 
-      <AddClientModal
+      <AddEditClientModal
         isOpen={isModalOpen}
         onClose={closeModal}
         addClient={handleAddClient}

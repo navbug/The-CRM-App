@@ -6,13 +6,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/reducers/userReducer";
 import { API_BASE_URL } from "../../config";
-import { useGoogleLogin } from "@react-oauth/google";
+import { getUser, register } from "../api";
+import GoogleLoginButton from "../components/GoogleLoginButton";
+import { ClipLoader } from "react-spinners";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -26,44 +29,43 @@ const Register = () => {
       password,
     };
 
+    if(password.length < 8) {
+      setPassword("");
+      console.log("password too short");
+      return;
+    }
+
     try {
-      const result = await axios.post(
-        `${API_BASE_URL}/register`,
-        userData
-      );
+      setLoading(true);
+      const data = await register(userData);
+      console.log("Registration successful", data);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data));
+      dispatch(setUser(data));
 
-      if (result.status === 201) {
-        console.log("register successful", result.data);
-      }
-      // setName("");
-      // setEmail("");
-      // setPassword("");
-
-      navigate("/login");
+      navigate(`/clients`);
+      toast.success("New User Registered & Signed In 👤");
     } catch (error) {
-      console.log("registration failed", error);
+      console.error(
+        "Registration failed",
+        error.response?.data?.message || error.message
+      );
+      toast.error(`Registration failed, please try again`);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const googleLogin = () => {
-    window.location.href = `http://localhost:4000/auth/google`;
-  }
-
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-4">
-      <img src={Logo} alt="Privyr" className="h-8 mb-4" />
+      <img src={Logo} alt="logo" className="h-8 mb-4" />
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8 m">
         <h2 className="text-2xl font-bold text-center mb-4">
           Register to Privyr
         </h2>
 
-        <button
-          onClick={googleLogin}
-          className="w-full bg-blue-600 font-semibold text-white py-2 px-4 rounded-md my-6 flex items-center justify-center hover:bg-opacity-90 transition duration-300"
-        >
-          Register with Google
-          <FaGoogle className="h-6 w-6 text-white ml-2" />
-        </button>
+        <GoogleLoginButton />
+
         <div className="flex items-center my-4 font-semibold">
           <div className="flex-grow border-t border-gray-300"></div>
           <span className="px-4 text-gray-500">OR</span>
@@ -123,9 +125,10 @@ const Register = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-teal-600 font-semibold text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition duration-300"
+            disabled={loading}
+            className={`w-full flex items-center justify-center gap-2 ${loading && "bg-opacity-80 cursor-not-allowed"} bg-teal-600 font-semibold text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition duration-300`}
           >
-            NEXT →
+            {loading ? <ClipLoader color="white" size={20}/> : `NEXT →`}
           </button>
         </form>
         <p className="text-center mt-6">

@@ -1,6 +1,5 @@
 import React from 'react';
 import { FaThumbsUp } from 'react-icons/fa';
-import { TiTick } from 'react-icons/ti';
 
 const InvitationSentModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
@@ -12,7 +11,7 @@ const InvitationSentModal = ({ isOpen, onClose }) => {
           <FaThumbsUp className='text-teal-500 w-14 h-14'/>
         </div>
         
-        <h2 className="text-2xl font-bold mb-4">INVITATIONS SENT!</h2>
+        <h2 className="text-2xl font-bold mb-4">INVITATION SENT!</h2>
         <button
           onClick={onClose}
           className="w-full bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition duration-300"

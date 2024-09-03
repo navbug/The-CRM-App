@@ -2,6 +2,7 @@ import { BsFillDiagram3Fill } from "react-icons/bs";
 import {
   FaCalendarAlt,
   FaCommentAlt,
+  FaExclamationTriangle,
   FaFile,
   FaPhoneAlt,
   FaStickyNote,
@@ -24,7 +25,7 @@ export const clientTabs = [
   { name: "All Clients", path: "/clients" },
   { name: "Uncontacted", path: "/clients/uncontacted" },
   { name: "Follow Ups", path: "/clients/follow-ups" },
-  { name: "Recently Viewed Content", path: "/clients/recently-viewed" },
+  { name: "Recently Contacted", path: "/clients/recently-contacted" },
 ];
 
 export const contentTabs = [
@@ -40,8 +41,8 @@ export const teamTabs = [
 ];
 
 export const integrationsTabs = [
-  { name: "Lead Sources", path: "/integrations" },
-  { name: "Import/Export Clients", path: "/integrations/other" },
+  // { name: "Lead Sources", path: "/integrations" },
+  { name: "Import/Export Clients", path: "/integrations" },
 ];
 
 export const navigationTabs = [
@@ -111,4 +112,10 @@ export const groupOptions = [
   { id: 3, name: "Proposal", color: "bg-purple-200 text-purple-700" },
   { id: 4, name: "Negotiating", color: "bg-red-200 text-red-700" },
   { id: 5, name: "Purchased", color: "bg-green-200 text-green-700" },
+];
+
+export const followUpTabs = [
+  { key: 'dueToday', label: 'Due Today', icon: FaCalendarAlt, color: 'text-blue-500' },
+  { key: 'upcoming', label: 'Upcoming', icon: FaCalendarAlt, color: 'text-gray-500' },
+  { key: 'overdue', label: 'Overdue', icon: FaExclamationTriangle, color: 'text-red-500' }
 ];

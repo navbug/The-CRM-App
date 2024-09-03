@@ -1,18 +1,23 @@
 import React, { useState, useCallback } from 'react';
+import axios from 'axios';
 import { NavLink, Outlet, useLocation, Link } from 'react-router-dom';
 import { FaUpload, FaPlus } from "react-icons/fa6";
 
 import { contentTabs } from '../../constants';
-import NewMessageTemplateModal from '../../components/NewMessageTemplateModal';
 import FileUploadModal from '../../components/FileUploadModal';
 import { MdFileUpload } from 'react-icons/md';
 import { API_BASE_URL } from '../../../config';
-import axios from 'axios';
+import MessageTemplateModal from '../../components/MessageTemplateModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { addMessage, fetchFiles, fetchMessages } from '../../api';
+import { addFileDetails, addMessageDetails, setInitialFiles, setInitialMessages } from '../../redux/reducers/contentReducer';
+import toast from 'react-hot-toast';
 
 const Content = () => {
   const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
   const [isFileModalOpen, setIsFileModalOpen] = useState(false);
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const tabName = location.pathname.split('/')[2];
 
@@ -20,6 +25,22 @@ const Content = () => {
   const handleCloseMessageModal = useCallback(() => setIsMessageModalOpen(false), []);
   const handleOpenFileModal = useCallback(() => setIsFileModalOpen(true), []);
   const handleCloseFileModal = useCallback(() => setIsFileModalOpen(false), []);
+
+  const handleFileUploaded = useCallback(async (file) => {
+    const fetchedFiles = await fetchFiles();
+    dispatch(setInitialFiles(fetchedFiles));
+    handleCloseFileModal();
+
+    toast.success(`Added New File Template 🔗`);
+  }, []);
+
+  const handleAddMessage = async (message) => {
+    await addMessage(message);
+    const fetchedMessages = await fetchMessages();
+    dispatch(setInitialMessages(fetchedMessages));
+
+    toast.success(`Added New Message Template 🔗`);
+  }
 
   const renderAddButton = () => {
     switch(tabName) {
@@ -45,22 +66,6 @@ const Content = () => {
         return null;
     }
   };
-
-  const handleAddMessage = async (message) => {
-    console.log(message);
-    try {
-      const response = await axios.post(
-        `${API_BASE_URL}/content/message`,
-        message,
-        { headers: { "Content-Type": "application/json" } }
-      );
-      if(response.status === 201) {
-        console.log("MESSAGE ADDED");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -91,14 +96,15 @@ const Content = () => {
         <Outlet />
       </div>
 
-      <NewMessageTemplateModal 
+      <MessageTemplateModal 
         isOpen={isMessageModalOpen} 
         onClose={handleCloseMessageModal}
-        addMessage={handleAddMessage}
+        onSave={handleAddMessage}
       />
       <FileUploadModal 
         isOpen={isFileModalOpen} 
         onClose={handleCloseFileModal} 
+        onFileUploaded={handleFileUploaded}
       />
     </div>
   );

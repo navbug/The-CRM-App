@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import Logo from "../assets/icons/privyr_logo.svg";
-import { FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/reducers/userReducer";
-import axios from "axios";
-import { API_BASE_URL } from "../../config";
+import { login } from "../api";
+import GoogleLoginButton from "../components/GoogleLoginButton";
+import { ClipLoader } from "react-spinners";
+import toast from "react-hot-toast";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,19 +24,21 @@ const SignIn = () => {
     };
 
     try {
-      const result = await axios.post(`${API_BASE_URL}/login`, userData);
-      
-      if (result.status === 200) {
-        localStorage.setItem("token", result.data.result.token);
-        localStorage.setItem("user", JSON.stringify(result.data.result.user));
+      setLoading(true);
+      const data = await login(userData);
 
-        dispatch(setUser(result.data.result.user));
-        navigate("/clients");
-      }
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data));
+      dispatch(setUser(data));
+
+      navigate(`/clients`);
+      toast.success("User Signed In 👤");
     } catch (error) {
-      setEmail("");
+      console.error('Login failed', error.response?.data?.message || error.message);
       setPassword("");
-      console.log("login error: " + error);
+      toast.error(`Login failed, please try again`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,10 +50,7 @@ const SignIn = () => {
           Sign In to Privyr
         </h2>
 
-        <button className="w-full bg-blue-600 font-semibold text-white py-2 px-4 rounded-md my-6 flex items-center justify-center hover:bg-opacity-90 transition duration-300">
-          SignIn with Google
-          <FaGoogle className="h-6 w-6 text-white ml-2" />
-        </button>
+        <GoogleLoginButton />
         <div className="flex items-center my-4 font-semibold">
           <div className="flex-grow border-t border-gray-300"></div>
           <span className="px-4 text-gray-500">OR</span>
@@ -84,7 +85,7 @@ const SignIn = () => {
               type="password"
               id="password"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-privyr-teal"
-              placeholder="should be min 8 characters"
+              placeholder="enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -92,15 +93,16 @@ const SignIn = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-teal-600 font-semibold text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition duration-300"
+            disabled={loading}
+            className={`w-full flex items-center justify-center gap-2 ${loading && "bg-opacity-80 cursor-not-allowed"} bg-teal-600 font-semibold text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition duration-300`}
           >
-            NEXT →
+            {loading ? <ClipLoader color="white" size={20}/> : `NEXT →`}
           </button>
         </form>
         <p className="text-center mt-6">
           Don't have an account?{" "}
           <Link to="/register" className="text-teal-800 font-semibold">
-            SIGN UP
+          SIGN UP
           </Link>
         </p>
       </div>
