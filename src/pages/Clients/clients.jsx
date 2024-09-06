@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
+import { NavLink, Outlet } from "react-router-dom";
 import { clientTabs } from "../../constants";
 import AddEditClientModal from "../../components/AddEditClientModel";
 import { FaPlus } from "react-icons/fa";
@@ -15,16 +15,20 @@ const Clients = () => {
 
   console.log(clientsInformation);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const openModal = useCallback(() => setIsModalOpen(true), []);
+  const closeModal = useCallback(() => setIsModalOpen(false), []);
 
-  const handleAddClient = async (clientInfo) => {
-    await addClient(clientInfo);
-    let fetchedClients = await fetchClients();
-    dispatch(setInitialClients(fetchedClients));
-
-    toast.success(`Added New Client 🔗`);
-  };
+  const handleAddClient = useCallback(async (clientInfo) => {
+    try {
+      await addClient(clientInfo);
+      const fetchedClients = await fetchClients();
+      dispatch(setInitialClients(fetchedClients));
+      toast.success(`Added New Client 🔗`);
+    } catch (error) {
+      console.error("Error adding client:", error);
+      toast.error("Failed to add client. Please try again.");
+    }
+  }, [dispatch]);
 
   return (
     <div className="container mx-auto px-4 py-8">

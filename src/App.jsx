@@ -1,71 +1,87 @@
-import React, { lazy, Suspense, useEffect } from "react";
+import React, { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
-import Header from "./components/Header";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUser } from "./redux/reducers/userReducer";
+import Header from "./components/Header";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Loading from "./components/Loading";
 import { PuffLoader } from "react-spinners";
 import { Toaster } from "react-hot-toast";
 
-const SignIn = lazy(() => import("./pages/SignIn"));
-const Clients = lazy(() => import("./pages/Clients/clients"));
-const Content = lazy(() => import("./pages/Content/Content"));
-const Uncontacted = lazy(() => import("./pages/Clients/Uncontacted"));
-const FollowUps = lazy(() => import("./pages/Clients/FollowUps"));
-const RecentlyContacted = lazy(() =>
-  import("./pages/Clients/RecentlyContacted")
-);
-const AllClients = lazy(() => import("./pages/Clients/AllClients"));
-const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
-const PublicRoute = lazy(() => import("./routes/PublicRoute"));
-const ClientDetails = lazy(() => import("./pages/Clients/ClientDetails"));
-const Messages = lazy(() => import("./pages/Content/Messages"));
-const Files = lazy(() => import("./pages/Content/Files"));
-const Pages = lazy(() => import("./pages/Content/Pages"));
-const MessageTemplate = lazy(() => import("./pages/Content/MessageTemplate"));
-const FileDetails = lazy(() => import("./pages/Content/FileDetails"));
-const PageDetails = lazy(() => import("./pages/Content/PageDetails"));
-const CreatePage = lazy(() => import("./pages/Content/CreatePage"));
-const TeamLayout = lazy(() => import("./pages/Team/TeamLayout"));
-const TeamDashboard = lazy(() => import("./pages/Team/TeamDashboard"));
-const TeamMembers = lazy(() => import("./pages/Team/TeamMembers"));
-const LeadAssignment = lazy(() => import("./pages/Team/LeadAssignment"));
-const IntegrationsLayout = lazy(() =>
-  import("./pages/Integrations/IntegrationsLayout")
-);
-const LeadSources = lazy(() => import("./pages/Integrations/LeadSources"));
-const ImportExportClients = lazy(() =>
-  import("./pages/Integrations/ImportExportClients")
-);
-const DashboardLayout = lazy(() => import("./pages/Admin/DashboardLayout"));
-const Dashboard = lazy(() => import("./pages/Admin/Dashboard"));
-const ManageUsers = lazy(() => import("./pages/Admin/ManageUsers"));
-const ManageContent = lazy(() => import("./pages/Admin/ManageContent"));
-const ManageTeams = lazy(() => import("./pages/Admin/ManageTeams"));
-const Register = lazy(() => import("./pages/Register"));
-const Profile = lazy(() => import("./pages/Profile"));
+// Lazy load components
+const lazyLoad = (path) => lazy(() => import(path));
+
+const components = {
+  SignIn: lazyLoad("./pages/SignIn"),
+  Clients: lazyLoad("./pages/Clients/clients"),
+  Content: lazyLoad("./pages/Content/Content"),
+  Uncontacted: lazyLoad("./pages/Clients/Uncontacted"),
+  FollowUps: lazyLoad("./pages/Clients/FollowUps"),
+  RecentlyContacted: lazyLoad("./pages/Clients/RecentlyContacted"),
+  AllClients: lazyLoad("./pages/Clients/AllClients"),
+  NotFoundPage: lazyLoad("./pages/NotFoundPage"),
+  PublicRoute: lazyLoad("./routes/PublicRoute"),
+  ClientDetails: lazyLoad("./pages/Clients/ClientDetails"),
+  Messages: lazyLoad("./pages/Content/Messages"),
+  Files: lazyLoad("./pages/Content/Files"),
+  Pages: lazyLoad("./pages/Content/Pages"),
+  MessageTemplate: lazyLoad("./pages/Content/MessageTemplate"),
+  FileDetails: lazyLoad("./pages/Content/FileDetails"),
+  PageDetails: lazyLoad("./pages/Content/PageDetails"),
+  CreatePage: lazyLoad("./pages/Content/CreatePage"),
+  TeamLayout: lazyLoad("./pages/Team/TeamLayout"),
+  TeamDashboard: lazyLoad("./pages/Team/TeamDashboard"),
+  TeamMembers: lazyLoad("./pages/Team/TeamMembers"),
+  LeadAssignment: lazyLoad("./pages/Team/LeadAssignment"),
+  IntegrationsLayout: lazyLoad("./pages/Integrations/IntegrationsLayout"),
+  ImportExportClients: lazyLoad("./pages/Integrations/ImportExportClients"),
+  DashboardLayout: lazyLoad("./pages/Admin/DashboardLayout"),
+  Dashboard: lazyLoad("./pages/Admin/Dashboard"),
+  ManageUsers: lazyLoad("./pages/Admin/ManageUsers"),
+  ManageContent: lazyLoad("./pages/Admin/ManageContent"),
+  ManageTeams: lazyLoad("./pages/Admin/ManageTeams"),
+  Register: lazyLoad("./pages/Register"),
+  Profile: lazyLoad("./pages/Profile"),
+  NoInternetPage: lazyLoad("./pages/NoInternetPage"),
+};
 
 const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
 
-  useEffect(() => {
-    if (localStorage.getItem("user")) {
-      const user = JSON.parse(localStorage.getItem("user"));
-
-      dispatch(setUser(user));
-    }
-  }, []);
-
-  const shouldShowHeader = () => {
+  const shouldShowHeader = useMemo(() => {
     const noHeaderPaths = ["/login", "/register", "/admin"];
     return !noHeaderPaths.some((path) => location.pathname.startsWith(path));
-  };
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      dispatch(setUser(user));
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  if (!isOnline) {
+    return <components.NoInternetPage />;
+  }
 
   return (
     <div>
-      {shouldShowHeader() && <Header />}
+      {shouldShowHeader && <Header />}
       <Suspense
         fallback={
           <Loading>
@@ -77,16 +93,16 @@ const App = () => {
           <Route
             path="/"
             element={
-              <PublicRoute>
-                <Clients />
-              </PublicRoute>
+              <components.PublicRoute>
+                <components.Clients />
+              </components.PublicRoute>
             }
           />
           <Route
             path="/login"
             element={
               <ProtectedRoute>
-                <SignIn />
+                <components.SignIn />
               </ProtectedRoute>
             }
           />
@@ -94,7 +110,7 @@ const App = () => {
             path="/register"
             element={
               <ProtectedRoute>
-                <Register />
+                <components.Register />
               </ProtectedRoute>
             }
           />
@@ -102,119 +118,129 @@ const App = () => {
           <Route
             path="/clients"
             element={
-              <PublicRoute>
-                <Clients />
-              </PublicRoute>
+              <components.PublicRoute>
+                <components.Clients />
+              </components.PublicRoute>
             }
           >
-            <Route index element={<AllClients />} />
-            <Route path="uncontacted" element={<Uncontacted />} />
-            <Route path="follow-ups" element={<FollowUps />} />
-            <Route path="recently-contacted" element={<RecentlyContacted />} />
+            <Route index element={<components.AllClients />} />
+            <Route path="uncontacted" element={<components.Uncontacted />} />
+            <Route path="follow-ups" element={<components.FollowUps />} />
+            <Route
+              path="recently-contacted"
+              element={<components.RecentlyContacted />}
+            />
           </Route>
+
           <Route
             path="/content"
             element={
-              <PublicRoute>
-                <Content />
-              </PublicRoute>
+              <components.PublicRoute>
+                <components.Content />
+              </components.PublicRoute>
             }
           >
-            <Route index path="messages" element={<Messages />} />
-            <Route path="files" element={<Files />} />
-            <Route path="pages" element={<Pages />} />
+            <Route index path="messages" element={<components.Messages />} />
+            <Route path="files" element={<components.Files />} />
+            <Route path="pages" element={<components.Pages />} />
           </Route>
 
           <Route
             path="/client/:id"
             element={
-              <PublicRoute>
-                <ClientDetails />
-              </PublicRoute>
+              <components.PublicRoute>
+                <components.ClientDetails />
+              </components.PublicRoute>
             }
           />
           <Route
             path="/content/message/:id"
             element={
-              <PublicRoute>
-                <MessageTemplate />
-              </PublicRoute>
+              <components.PublicRoute>
+                <components.MessageTemplate />
+              </components.PublicRoute>
             }
           />
           <Route
             path="/content/file/:id"
             element={
-              <PublicRoute>
-                <FileDetails />
-              </PublicRoute>
+              <components.PublicRoute>
+                <components.FileDetails />
+              </components.PublicRoute>
             }
           />
           <Route
             path="/content/page/:id"
             element={
-              <PublicRoute>
-                <PageDetails />
-              </PublicRoute>
+              <components.PublicRoute>
+                <components.PageDetails />
+              </components.PublicRoute>
             }
           />
           <Route
             path="/content/pages/new"
             element={
-              <PublicRoute>
-                <CreatePage />
-              </PublicRoute>
+              <components.PublicRoute>
+                <components.CreatePage />
+              </components.PublicRoute>
             }
           />
 
           <Route
             path="/team"
             element={
-              <PublicRoute>
-                <TeamLayout />
-              </PublicRoute>
+              <components.PublicRoute>
+                <components.TeamLayout />
+              </components.PublicRoute>
             }
           >
-            <Route index path="dashboard" element={<TeamDashboard />} />
-            <Route path="manage" element={<TeamMembers />} />
-            <Route path="lead-assignment" element={<LeadAssignment />} />
+            <Route
+              index
+              path="dashboard"
+              element={<components.TeamDashboard />}
+            />
+            <Route path="manage" element={<components.TeamMembers />} />
+            <Route
+              path="lead-assignment"
+              element={<components.LeadAssignment />}
+            />
           </Route>
 
           <Route
             path="/integrations"
             element={
-              <PublicRoute>
-                <IntegrationsLayout />
-              </PublicRoute>
+              <components.PublicRoute>
+                <components.IntegrationsLayout />
+              </components.PublicRoute>
             }
           >
-            {/* <Route index path="" element={<LeadSources />} /> */}
-            <Route path="" element={<ImportExportClients />} />
+            <Route path="" element={<components.ImportExportClients />} />
           </Route>
 
           <Route
             path="/admin/dashboard"
             element={
-              <PublicRoute>
-                <DashboardLayout />
-              </PublicRoute>
+              <components.PublicRoute>
+                <components.DashboardLayout />
+              </components.PublicRoute>
             }
           >
-            <Route index path="" element={<Dashboard />} />
-            <Route path="Users" element={<ManageUsers />} />
-            <Route path="Content" element={<ManageContent />} />
-            <Route path="Teams" element={<ManageTeams />} />
+            <Route index path="" element={<components.Dashboard />} />
+            <Route path="Users" element={<components.ManageUsers />} />
+            <Route path="Content" element={<components.ManageContent />} />
+            <Route path="Teams" element={<components.ManageTeams />} />
           </Route>
 
           <Route
             path="/account/profile"
             element={
-              <PublicRoute>
-                <Profile />
-              </PublicRoute>
+              <components.PublicRoute>
+                <components.Profile />
+              </components.PublicRoute>
             }
           />
 
-          <Route path="*" element={<NotFoundPage />} />
+          <Route path="*" element={<components.NotFoundPage />} />
         </Routes>
       </Suspense>
       <Toaster />

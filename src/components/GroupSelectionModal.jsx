@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { groupOptions } from "../../constants";
+import { groupOptions } from "../constants";
 
 const GroupSelectionModal = ({ isOpen, onClose, onSave, selectedGroups }) => {
   const [groups, setGroups] = useState(selectedGroups);

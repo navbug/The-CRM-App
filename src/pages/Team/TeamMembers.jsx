@@ -56,7 +56,7 @@ const TeamMembers = () => {
                 <tr className="border-b">
                   <th className="text-left py-2">NAME</th>
                   <th className="text-left py-2">STATUS</th>
-                  <th className="text-left py-2">PERMISSIONS</th>
+                  {/* <th className="text-left py-2">PERMISSIONS</th> */}
                   <th></th>
                 </tr>
               </thead>
@@ -73,9 +73,9 @@ const TeamMembers = () => {
                         Active
                       </span>
                     </td>
-                    <td className="py-4">
+                    {/* <td className="py-4">
                       <div className="text-sm">ALL</div>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>

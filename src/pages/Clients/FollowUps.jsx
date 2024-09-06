@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchClients } from "../../api";
 import { followUpTabs } from "../../constants";
@@ -17,22 +17,18 @@ const FollowUps = () => {
   const [activeTab, setActiveTab] = useState("dueToday");
   const navigate = useNavigate();
 
-  const fetchAllClients = async () => {
-    let fetchedClients = await fetchClients();
-    setClients(fetchedClients);
-
-    setLoading(false);
-  };
-
-  const filteredClients = clients.filter(client => client.followUp);
-
-  useEffect(() => {
-    fetchAllClients();
+  const fetchAllClients = useCallback(async () => {
+    try {
+      const fetchedClients = await fetchClients();
+      setClients(fetchedClients);
+    } catch (error) {
+      console.error("Error fetching clients:", error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  useEffect(() => {
-    categorizeClients();
-  }, [clients]);
+  const filteredClients = clients.filter(client => client.followUp);
 
   const categorizeClients = () => {
     const today = new Date();
@@ -80,19 +76,29 @@ const FollowUps = () => {
       });
     }
   };
+  
+  useEffect(() => {
+    fetchAllClients();
+  }, []);
+
+  useEffect(() => {
+    categorizeClients();
+  }, [clients]);
+
+  if (loading) {
+    return (
+      <Loading>
+        <PuffLoader color="#09e34f" speedMultiplier={3} />
+      </Loading>
+    );
+  }
+
+  if (filteredClients.length === 0) {
+    return <NoDataWrapper>No Clients</NoDataWrapper>;
+  }
 
   return (
     <div className="p-4">
-      {loading && (
-        <Loading>
-          <PuffLoader color="#09e34f" speedMultiplier={3} />
-        </Loading>
-      )}
-      {!loading && filteredClients.length === 0 && (
-        <NoDataWrapper>No Clients</NoDataWrapper>
-      )}
-      {!loading && clients.length > 0 && (
-        <div>
           <div className="flex mb-4 bg-white shadow rounded-lg overflow-hidden">
             {followUpTabs.map((tab) => (
               <button
@@ -143,9 +149,6 @@ const FollowUps = () => {
               </tbody>
             </table>
           </div>)}
-          
-        </div>
-      )}
     </div>
   );
 };
