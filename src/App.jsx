@@ -11,39 +11,35 @@ import Register from "./pages/Register";
 import { PuffLoader } from "react-spinners";
 import { Toaster } from "react-hot-toast";
 
-// Lazy load components
-const lazyLoad = (path) => lazy(() => import(path));
-
-const components = {
-  Clients: lazyLoad("./pages/Clients/clients"),
-  Content: lazyLoad("./pages/Content/Content"),
-  Uncontacted: lazyLoad("./pages/Clients/Uncontacted"),
-  FollowUps: lazyLoad("./pages/Clients/FollowUps"),
-  RecentlyContacted: lazyLoad("./pages/Clients/RecentlyContacted"),
-  AllClients: lazyLoad("./pages/Clients/AllClients"),
-  NotFoundPage: lazyLoad("./pages/NotFoundPage"),
-  ClientDetails: lazyLoad("./pages/Clients/ClientDetails"),
-  Messages: lazyLoad("./pages/Content/Messages"),
-  Files: lazyLoad("./pages/Content/Files"),
-  Pages: lazyLoad("./pages/Content/Pages"),
-  MessageTemplate: lazyLoad("./pages/Content/MessageTemplate"),
-  FileDetails: lazyLoad("./pages/Content/FileDetails"),
-  PageDetails: lazyLoad("./pages/Content/PageDetails"),
-  CreatePage: lazyLoad("./pages/Content/CreatePage"),
-  TeamLayout: lazyLoad("./pages/Team/TeamLayout"),
-  TeamDashboard: lazyLoad("./pages/Team/TeamDashboard"),
-  TeamMembers: lazyLoad("./pages/Team/TeamMembers"),
-  LeadAssignment: lazyLoad("./pages/Team/LeadAssignment"),
-  IntegrationsLayout: lazyLoad("./pages/Integrations/IntegrationsLayout"),
-  ImportExportClients: lazyLoad("./pages/Integrations/ImportExportClients"),
-  DashboardLayout: lazyLoad("./pages/Admin/DashboardLayout"),
-  Dashboard: lazyLoad("./pages/Admin/Dashboard"),
-  ManageUsers: lazyLoad("./pages/Admin/ManageUsers"),
-  ManageContent: lazyLoad("./pages/Admin/ManageContent"),
-  ManageTeams: lazyLoad("./pages/Admin/ManageTeams"),
-  Profile: lazyLoad("./pages/Profile"),
-  NoInternetPage: lazyLoad("./pages/NoInternetPage"),
-};
+// Lazy load components individually
+const Clients = lazy(() => import("./pages/Clients/clients"));
+const Content = lazy(() => import("./pages/Content/Content"));
+const Uncontacted = lazy(() => import("./pages/Clients/Uncontacted"));
+const FollowUps = lazy(() => import("./pages/Clients/FollowUps"));
+const RecentlyContacted = lazy(() => import("./pages/Clients/RecentlyContacted"));
+const AllClients = lazy(() => import("./pages/Clients/AllClients"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const ClientDetails = lazy(() => import("./pages/Clients/ClientDetails"));
+const Messages = lazy(() => import("./pages/Content/Messages"));
+const Files = lazy(() => import("./pages/Content/Files"));
+const Pages = lazy(() => import("./pages/Content/Pages"));
+const MessageTemplate = lazy(() => import("./pages/Content/MessageTemplate"));
+const FileDetails = lazy(() => import("./pages/Content/FileDetails"));
+const PageDetails = lazy(() => import("./pages/Content/PageDetails"));
+const CreatePage = lazy(() => import("./pages/Content/CreatePage"));
+const TeamLayout = lazy(() => import("./pages/Team/TeamLayout"));
+const TeamDashboard = lazy(() => import("./pages/Team/TeamDashboard"));
+const TeamMembers = lazy(() => import("./pages/Team/TeamMembers"));
+const LeadAssignment = lazy(() => import("./pages/Team/LeadAssignment"));
+const IntegrationsLayout = lazy(() => import("./pages/Integrations/IntegrationsLayout"));
+const ImportExportClients = lazy(() => import("./pages/Integrations/ImportExportClients"));
+const DashboardLayout = lazy(() => import("./pages/Admin/DashboardLayout"));
+const Dashboard = lazy(() => import("./pages/Admin/Dashboard"));
+const ManageUsers = lazy(() => import("./pages/Admin/ManageUsers"));
+const ManageContent = lazy(() => import("./pages/Admin/ManageContent"));
+const ManageTeams = lazy(() => import("./pages/Admin/ManageTeams"));
+const Profile = lazy(() => import("./pages/Profile"));
+const NoInternetPage = lazy(() => import("./pages/NoInternetPage"));
 
 const App = () => {
   const dispatch = useDispatch();
@@ -76,7 +72,7 @@ const App = () => {
   }, []);
 
   if (!isOnline) {
-    return <components.NoInternetPage />;
+    return <NoInternetPage />;
   }
 
   return (
@@ -94,7 +90,7 @@ const App = () => {
             path="/"
             element={
               <PublicRoute>
-                <components.Clients />
+                <Clients />
               </PublicRoute>
             }
           />
@@ -119,16 +115,16 @@ const App = () => {
             path="/clients"
             element={
               <PublicRoute>
-                <components.Clients />
+                <Clients />
               </PublicRoute>
             }
           >
-            <Route index element={<components.AllClients />} />
-            <Route path="uncontacted" element={<components.Uncontacted />} />
-            <Route path="follow-ups" element={<components.FollowUps />} />
+            <Route index element={<AllClients />} />
+            <Route path="uncontacted" element={<Uncontacted />} />
+            <Route path="follow-ups" element={<FollowUps />} />
             <Route
               path="recently-contacted"
-              element={<components.RecentlyContacted />}
+              element={<RecentlyContacted />}
             />
           </Route>
 
@@ -136,20 +132,20 @@ const App = () => {
             path="/content"
             element={
               <PublicRoute>
-                <components.Content />
+                <Content />
               </PublicRoute>
             }
           >
-            <Route index path="messages" element={<components.Messages />} />
-            <Route path="files" element={<components.Files />} />
-            <Route path="pages" element={<components.Pages />} />
+            <Route index path="messages" element={<Messages />} />
+            <Route path="files" element={<Files />} />
+            <Route path="pages" element={<Pages />} />
           </Route>
 
           <Route
             path="/client/:id"
             element={
               <PublicRoute>
-                <components.ClientDetails />
+                <ClientDetails />
               </PublicRoute>
             }
           />
@@ -157,7 +153,7 @@ const App = () => {
             path="/content/message/:id"
             element={
               <PublicRoute>
-                <components.MessageTemplate />
+                <MessageTemplate />
               </PublicRoute>
             }
           />
@@ -165,7 +161,7 @@ const App = () => {
             path="/content/file/:id"
             element={
               <PublicRoute>
-                <components.FileDetails />
+                <FileDetails />
               </PublicRoute>
             }
           />
@@ -173,7 +169,7 @@ const App = () => {
             path="/content/page/:id"
             element={
               <PublicRoute>
-                <components.PageDetails />
+                <PageDetails />
               </PublicRoute>
             }
           />
@@ -181,7 +177,7 @@ const App = () => {
             path="/content/pages/new"
             element={
               <PublicRoute>
-                <components.CreatePage />
+                <CreatePage />
               </PublicRoute>
             }
           />
@@ -190,19 +186,19 @@ const App = () => {
             path="/team"
             element={
               <PublicRoute>
-                <components.TeamLayout />
+                <TeamLayout />
               </PublicRoute>
             }
           >
             <Route
               index
               path="dashboard"
-              element={<components.TeamDashboard />}
+              element={<TeamDashboard />}
             />
-            <Route path="manage" element={<components.TeamMembers />} />
+            <Route path="manage" element={<TeamMembers />} />
             <Route
               path="lead-assignment"
-              element={<components.LeadAssignment />}
+              element={<LeadAssignment />}
             />
           </Route>
 
@@ -210,37 +206,37 @@ const App = () => {
             path="/integrations"
             element={
               <PublicRoute>
-                <components.IntegrationsLayout />
+                <IntegrationsLayout />
               </PublicRoute>
             }
           >
-            <Route path="" element={<components.ImportExportClients />} />
+            <Route path="" element={<ImportExportClients />} />
           </Route>
 
           <Route
             path="/admin/dashboard"
             element={
               <PublicRoute>
-                <components.DashboardLayout />
+                <DashboardLayout />
               </PublicRoute>
             }
           >
-            <Route index path="" element={<components.Dashboard />} />
-            <Route path="Users" element={<components.ManageUsers />} />
-            <Route path="Content" element={<components.ManageContent />} />
-            <Route path="Teams" element={<components.ManageTeams />} />
+            <Route index path="" element={<Dashboard />} />
+            <Route path="Users" element={<ManageUsers />} />
+            <Route path="Content" element={<ManageContent />} />
+            <Route path="Teams" element={<ManageTeams />} />
           </Route>
 
           <Route
             path="/account/profile"
             element={
               <PublicRoute>
-                <components.Profile />
+                <Profile />
               </PublicRoute>
             }
           />
 
-          <Route path="*" element={<components.NotFoundPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
       <Toaster />
