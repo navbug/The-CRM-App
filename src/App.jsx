@@ -6,6 +6,8 @@ import Header from "./components/Header";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import Loading from "./components/Loading";
+import SignIn from "./pages/SignIn";
+import Register from "./pages/Register";
 import { PuffLoader } from "react-spinners";
 import { Toaster } from "react-hot-toast";
 
@@ -13,7 +15,6 @@ import { Toaster } from "react-hot-toast";
 const lazyLoad = (path) => lazy(() => import(path));
 
 const components = {
-  SignIn: lazyLoad("./pages/SignIn"),
   Clients: lazyLoad("./pages/Clients/clients"),
   Content: lazyLoad("./pages/Content/Content"),
   Uncontacted: lazyLoad("./pages/Clients/Uncontacted"),
@@ -40,7 +41,6 @@ const components = {
   ManageUsers: lazyLoad("./pages/Admin/ManageUsers"),
   ManageContent: lazyLoad("./pages/Admin/ManageContent"),
   ManageTeams: lazyLoad("./pages/Admin/ManageTeams"),
-  Register: lazyLoad("./pages/Register"),
   Profile: lazyLoad("./pages/Profile"),
   NoInternetPage: lazyLoad("./pages/NoInternetPage"),
 };
@@ -102,7 +102,7 @@ const App = () => {
             path="/login"
             element={
               <ProtectedRoute>
-                <components.SignIn />
+                <SignIn />
               </ProtectedRoute>
             }
           />
@@ -110,7 +110,7 @@ const App = () => {
             path="/register"
             element={
               <ProtectedRoute>
-                <components.Register />
+                <Register />
               </ProtectedRoute>
             }
           />
