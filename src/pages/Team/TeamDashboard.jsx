@@ -124,6 +124,8 @@ const TeamDashboard = () => {
 
   const metrics = calculateMetrics(clientsInformation);
 
+  console.log(users);
+
   useEffect(() => {
     fetchInitialData();
   }, []);

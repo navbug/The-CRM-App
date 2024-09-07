@@ -9,7 +9,6 @@ import { navItems } from "../constants";
 import Logo from "../assets/icons/privyr_logo.svg";
 import { setUser } from "../redux/reducers/userReducer";
 import { fetchUser } from "../api";
-import Loading from "./Loading";
 import { API_BARE_BASE_URL } from "../../config";
 
 const Header = () => {
@@ -43,7 +42,7 @@ const Header = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -108,7 +107,7 @@ const Header = () => {
         <img
           src={`${API_BARE_BASE_URL}${profileUser.avatar}`}
           alt="Profile"
-          className="w-6 h-6 object-cover rounded-full"
+          className="w-8 h-8 object-cover rounded-full"
         />
       ) : (
         <div className="w-6 h-6 text-xl font-bold text-white flex justify-center items-center">
@@ -163,25 +162,25 @@ const Header = () => {
 
     if(!navigator.onLine) return;
 
-  if (loading) {
-    return (
-      <Loading height="2">
-        <PuffLoader color="#09e34f" speedMultiplier={3} />
-      </Loading>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <Loading height="2">
+  //       <PuffLoader color="#09e34f" speedMultiplier={3} />
+  //     </Loading>
+  //   );
+  // }
 
   return (
     <div>
-      {navigator.onLine && <IconContext.Provider value={{ className: "react-icons" }}>
+      {navigator.onLine && !loading && <IconContext.Provider value={{ className: "react-icons" }}>
         <nav className="bg-white shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
               {/* Left side (logo and nav items) */}
               <div className="flex">
-                <div className="flex-shrink-0 flex items-center">
-                  <img className="h-8 w-auto" src={Logo} alt="Logo" />
-                </div>
+                <Link to={`/clients`} className="flex-shrink-0 flex items-center">
+                  <img className="h-10 w-auto" src={Logo} alt="Logo" />
+                </Link>
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                   {renderNavItems()}
                 </div>

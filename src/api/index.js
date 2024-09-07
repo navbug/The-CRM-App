@@ -73,6 +73,23 @@ export const updateUser = async (id, updatedUser) => {
   }
 };
 
+export const uploadAvatar = async (id, photoData) => {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/users/${id}/upload-avatar`,
+      photoData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+    return response;
+  } catch (err) {
+    console.error("Error uploading photo:", err);
+  }
+}
+
+
+//Client APIs
 export const fetchClientsOfAllUsers = async () => {
   try {
     const response = await api.get(`${API_BASE_URL}/clients/allClients`);
@@ -97,9 +114,7 @@ export const fetchClients = async () => {
 
 export const fetchClient = async (id) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/clients/${id}`, {
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await api.get(`${API_BASE_URL}/clients/${id}`);
     if (response.status === 200) {
       console.log(response.data.client);
       return response.data.client;
@@ -111,11 +126,7 @@ export const fetchClient = async (id) => {
 
 export const addClient = async (clientInfo) => {
   try {
-    const response = await axios.post(
-      `${API_BASE_URL}/clients/new`,
-      clientInfo,
-      { headers: { "Content-Type": "application/json" } }
-    );
+    const response = await api.post(`${API_BASE_URL}/clients/new`, clientInfo);
     if (response.status === 201) {
       console.log("CLIENT ADDED");
       return true;
@@ -128,11 +139,8 @@ export const addClient = async (clientInfo) => {
 export const updateClientInfo = async (updatedClientInfo) => {
   console.log(updatedClientInfo);
   try {
-    const response = await axios.put(
-      `${API_BASE_URL}/clients/${updatedClientInfo._id}`,
-      updatedClientInfo,
-      { headers: { "Content-Type": "application/json" } }
-    );
+    const response = await api.put(
+      `${API_BASE_URL}/clients/${updatedClientInfo._id}`, updatedClientInfo);
     if (response.status === 200) {
       console.log("updated client info");
     }
@@ -143,26 +151,25 @@ export const updateClientInfo = async (updatedClientInfo) => {
 
 export const deleteClient = async (clientId) => {
   try {
-    const response = await axios.delete(`${API_BASE_URL}/clients/${clientId}`, {
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await api.delete(`${API_BASE_URL}/clients/${clientId}`);
     if (response.status === 200) {
       console.log("deleted client successfully");
+      return true;
     }
   } catch (err) {
     console.log(err);
   }
 };
 
-//Content apis
+//Content APIs
 export const fetchMessages = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/content/all`, {
+    const response = await axios.get(`${API_BASE_URL}/content/message/all`, {
       headers: { "Content-Type": "application/json" },
     });
     if (response.status === 200) {
-      console.log(response.data.content[0].messages);
-      return response.data.content[0].messages;
+      console.log(response.data);
+      return response.data;
     }
   } catch (err) {
     console.log(err);

@@ -40,7 +40,7 @@ const MessageTemplate = () => {
       );
       if (response.status === 200) {
         console.log(response.data);
-        setMessage(response.data.message);
+        setMessage(response.data);
       }
     } catch (err) {
       console.log(err);

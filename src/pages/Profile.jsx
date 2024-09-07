@@ -6,7 +6,7 @@ import { FaEdit } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { API_BARE_BASE_URL, API_BASE_URL } from "../../config";
 import { setUser } from "../redux/reducers/userReducer";
-import { fetchUser, updateUser } from "../api";
+import { fetchUser, updateUser, uploadAvatar } from "../api";
 
 const PhotoUploadModal = ({ onClose, onUpload }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -238,13 +238,7 @@ const Profile = () => {
       formData.append("avatar", file);
 
       try {
-        const response = await axios.post(
-          `${API_BASE_URL}/users/${profileData._id}/upload-avatar`,
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
+        const response = await uploadAvatar(profileData._id, formData);
 
         if (response.status === 200) {
           fetchUserInfo(profileData._id);
