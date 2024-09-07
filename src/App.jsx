@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "./redux/reducers/userReducer";
 import Header from "./components/Header";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import PublicRoute from "./routes/PublicRoute";
 import Loading from "./components/Loading";
 import { PuffLoader } from "react-spinners";
 import { Toaster } from "react-hot-toast";
@@ -20,7 +21,6 @@ const components = {
   RecentlyContacted: lazyLoad("./pages/Clients/RecentlyContacted"),
   AllClients: lazyLoad("./pages/Clients/AllClients"),
   NotFoundPage: lazyLoad("./pages/NotFoundPage"),
-  PublicRoute: lazyLoad("./routes/PublicRoute"),
   ClientDetails: lazyLoad("./pages/Clients/ClientDetails"),
   Messages: lazyLoad("./pages/Content/Messages"),
   Files: lazyLoad("./pages/Content/Files"),
@@ -93,9 +93,9 @@ const App = () => {
           <Route
             path="/"
             element={
-              <components.PublicRoute>
+              <PublicRoute>
                 <components.Clients />
-              </components.PublicRoute>
+              </PublicRoute>
             }
           />
           <Route
@@ -118,9 +118,9 @@ const App = () => {
           <Route
             path="/clients"
             element={
-              <components.PublicRoute>
+              <PublicRoute>
                 <components.Clients />
-              </components.PublicRoute>
+              </PublicRoute>
             }
           >
             <Route index element={<components.AllClients />} />
@@ -135,9 +135,9 @@ const App = () => {
           <Route
             path="/content"
             element={
-              <components.PublicRoute>
+              <PublicRoute>
                 <components.Content />
-              </components.PublicRoute>
+              </PublicRoute>
             }
           >
             <Route index path="messages" element={<components.Messages />} />
@@ -148,50 +148,50 @@ const App = () => {
           <Route
             path="/client/:id"
             element={
-              <components.PublicRoute>
+              <PublicRoute>
                 <components.ClientDetails />
-              </components.PublicRoute>
+              </PublicRoute>
             }
           />
           <Route
             path="/content/message/:id"
             element={
-              <components.PublicRoute>
+              <PublicRoute>
                 <components.MessageTemplate />
-              </components.PublicRoute>
+              </PublicRoute>
             }
           />
           <Route
             path="/content/file/:id"
             element={
-              <components.PublicRoute>
+              <PublicRoute>
                 <components.FileDetails />
-              </components.PublicRoute>
+              </PublicRoute>
             }
           />
           <Route
             path="/content/page/:id"
             element={
-              <components.PublicRoute>
+              <PublicRoute>
                 <components.PageDetails />
-              </components.PublicRoute>
+              </PublicRoute>
             }
           />
           <Route
             path="/content/pages/new"
             element={
-              <components.PublicRoute>
+              <PublicRoute>
                 <components.CreatePage />
-              </components.PublicRoute>
+              </PublicRoute>
             }
           />
 
           <Route
             path="/team"
             element={
-              <components.PublicRoute>
+              <PublicRoute>
                 <components.TeamLayout />
-              </components.PublicRoute>
+              </PublicRoute>
             }
           >
             <Route
@@ -209,9 +209,9 @@ const App = () => {
           <Route
             path="/integrations"
             element={
-              <components.PublicRoute>
+              <PublicRoute>
                 <components.IntegrationsLayout />
-              </components.PublicRoute>
+              </PublicRoute>
             }
           >
             <Route path="" element={<components.ImportExportClients />} />
@@ -220,9 +220,9 @@ const App = () => {
           <Route
             path="/admin/dashboard"
             element={
-              <components.PublicRoute>
+              <PublicRoute>
                 <components.DashboardLayout />
-              </components.PublicRoute>
+              </PublicRoute>
             }
           >
             <Route index path="" element={<components.Dashboard />} />
@@ -234,9 +234,9 @@ const App = () => {
           <Route
             path="/account/profile"
             element={
-              <components.PublicRoute>
+              <PublicRoute>
                 <components.Profile />
-              </components.PublicRoute>
+              </PublicRoute>
             }
           />
 
