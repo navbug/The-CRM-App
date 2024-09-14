@@ -9,30 +9,34 @@ const GoogleLoginButton = () => {
   const dispatch = useDispatch();
 
   const handleGoogleLogin = () => {
-    const googleLoginWindow = window.open(
-      `${API_BASE_URL}/auth/google`,
-      "_blank",
-      "width=500,height=600"
-    );
-
-    const checkAuth = setInterval(async () => {
-      if (googleLoginWindow.closed) {
-        clearInterval(checkAuth);
-        try {
-          const userData = await getUser();
-          if (userData) {
-            console.log(userData);
-            localStorage.setItem("token", userData.token);
-            localStorage.setItem("user", JSON.stringify(userData));
-            dispatch(setUser(userData));
-            navigate("/clients");
-          }
-        } catch (error) {
-          console.error("Failed to fetch user after Google login", error);
-        }
-      }
-    }, 500);
+    window.location.href = `${API_BASE_URL}/auth/google`;
   };
+  
+  // const handleGoogleLogin = () => {
+  //   const googleLoginWindow = window.open(
+  //     `${API_BASE_URL}/auth/google`,
+  //     "_blank",
+  //     "width=500,height=600"
+  //   );
+
+  //   const checkAuth = setInterval(async () => {
+  //     if (googleLoginWindow.closed) {
+  //       clearInterval(checkAuth);
+  //       try {
+  //         const userData = await getUser();
+  //         if (userData) {
+  //           console.log(userData);
+  //           localStorage.setItem("token", userData.token);
+  //           localStorage.setItem("user", JSON.stringify(userData));
+  //           dispatch(setUser(userData));
+  //           navigate("/clients");
+  //         }
+  //       } catch (error) {
+  //         console.error("Failed to fetch user after Google login", error);
+  //       }
+  //     }
+  //   }, 500);
+  // };
 
   return (
     <button

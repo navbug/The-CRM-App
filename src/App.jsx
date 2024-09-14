@@ -10,6 +10,7 @@ import SignIn from "./pages/SignIn";
 import Register from "./pages/Register";
 import { PuffLoader } from "react-spinners";
 import { Toaster } from "react-hot-toast";
+import AuthCallback from "./components/AuthCallback";
 
 // Lazy load components individually
 const Clients = lazy(() => import("./pages/Clients/clients"));
@@ -109,6 +110,10 @@ const App = () => {
                 <Register />
               </ProtectedRoute>
             }
+          />
+          <Route
+            path="/auth-callback"
+            element={<AuthCallback />}
           />
 
           <Route
