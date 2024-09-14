@@ -3,7 +3,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { clientTabs } from "../../constants";
 import AddEditClientModal from "../../components/AddEditClientModel";
 import { FaPlus } from "react-icons/fa";
-import { addClient, fetchClients, getUser } from "../../api";
+import { addClient, fetchClients } from "../../api";
 import { useDispatch, useSelector } from "react-redux";
 import { setInitialClients } from "../../redux/reducers/clientReducer";
 import toast from "react-hot-toast";
