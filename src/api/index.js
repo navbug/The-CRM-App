@@ -33,19 +33,7 @@ export const login = async (userData) => {
 };
 
 export const getUser = async () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get("token");
-
-  if (token) {
-    localStorage.setItem("token", token);
-  }
-
-  const response = await axios.get("/auth/user", {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-    withCredentials: true,
-  });
+  const response = await api.get("/auth/user");
   return response.data;
 };
 
@@ -99,7 +87,8 @@ export const uploadAvatar = async (id, photoData) => {
   } catch (err) {
     console.error("Error uploading photo:", err);
   }
-};
+}
+
 
 //Client APIs
 export const fetchClientsOfAllUsers = async () => {
@@ -152,9 +141,7 @@ export const updateClientInfo = async (updatedClientInfo) => {
   console.log(updatedClientInfo);
   try {
     const response = await api.put(
-      `${API_BASE_URL}/clients/${updatedClientInfo._id}`,
-      updatedClientInfo
-    );
+      `${API_BASE_URL}/clients/${updatedClientInfo._id}`, updatedClientInfo);
     if (response.status === 200) {
       console.log("updated client info");
     }
@@ -197,7 +184,8 @@ export const addMessage = async (message) => {
     const response = await axios.post(
       `${API_BASE_URL}/content/message`,
       message,
-      { headers: { "Content-Type": "application/json" }, withCredentials: true }
+      { headers: { "Content-Type": "application/json" }, 
+      withCredentials: true, }
     );
     if (response.status === 201) {
       console.log("MESSAGE ADDED");
@@ -214,7 +202,8 @@ export const updateMessage = async (updatedMessage) => {
     const response = await axios.put(
       `${API_BASE_URL}/content/message/${updatedMessage._id}`,
       updatedMessage,
-      { headers: { "Content-Type": "application/json" }, withCredentials: true }
+      { headers: { "Content-Type": "application/json" }, 
+      withCredentials: true, }
     );
     if (response.status === 200) {
       console.log("updated message template");
@@ -229,7 +218,8 @@ export const deleteMessage = async (messageId) => {
   try {
     const response = await axios.delete(
       `${API_BASE_URL}/content/message/${messageId}`,
-      { headers: { "Content-Type": "application/json" }, withCredentials: true }
+      { headers: { "Content-Type": "application/json" }, 
+      withCredentials: true, }
     );
     if (response.status === 200) {
       console.log("deleted message successfully");
@@ -241,9 +231,7 @@ export const deleteMessage = async (messageId) => {
 
 export const fetchFiles = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/content/file/all`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`${API_BASE_URL}/content/file/all`, { withCredentials: true });
     return response.data;
   } catch (error) {
     console.error("Error fetching files:", error);
@@ -252,9 +240,7 @@ export const fetchFiles = async () => {
 
 export const fetchFile = async (id) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/content/file/${id}`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`${API_BASE_URL}/content/file/${id}`, { withCredentials: true });
     return response.data;
   } catch (error) {
     console.error("Error fetching file details:", error);
@@ -284,7 +270,8 @@ export const updateFileData = async (updatedFile) => {
     const response = await axios.put(
       `${API_BASE_URL}/content/file/${updatedFile._id}`,
       updatedFile,
-      { headers: { "Content-Type": "application/json" }, withCredentials: true }
+      { headers: { "Content-Type": "application/json" },
+      withCredentials: true, }
     );
     if (response.status === 200) {
       console.log("updated file details");
@@ -308,9 +295,7 @@ export const deleteFile = async (id) => {
 
 export const fetchPages = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/content/page/all`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`${API_BASE_URL}/content/page/all`, { withCredentials: true, });
     return response.data.pages;
   } catch (error) {
     console.error("Error fetching pages:", error);
@@ -319,9 +304,7 @@ export const fetchPages = async () => {
 
 export const fetchPage = async (id) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/content/page/${id}`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`${API_BASE_URL}/content/page/${id}`, { withCredentials: true });
     return response.data.page;
   } catch (error) {
     console.error("Error fetching page details:", error);
@@ -333,10 +316,8 @@ export const addPage = async (pageData) => {
     const response = await axios.post(
       `${API_BASE_URL}/content/page`,
       pageData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-        withCredentials: true,
-      }
+      { headers: { "Content-Type": "multipart/form-data" },
+      withCredentials: true, }
     );
     if (response.status === 201) {
       console.log("Page Added");
@@ -352,10 +333,8 @@ export const updatePage = async (id, updatedPageData) => {
     const response = await axios.put(
       `${API_BASE_URL}/content/page/${id}`,
       updatedPageData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-        withCredentials: true,
-      }
+      { headers: { "Content-Type": "multipart/form-data" },
+      withCredentials: true, }
     );
     if (response.status === 200) {
       console.log("updated page data");
@@ -384,9 +363,7 @@ export const updatePageData = async (updatedPage) => {
 
 export const deletePage = async (id) => {
   try {
-    await axios.delete(`${API_BASE_URL}/content/page/${id}`, {
-      withCredentials: true,
-    });
+    await axios.delete(`${API_BASE_URL}/content/page/${id}`, { withCredentials: true });
     return true;
   } catch (error) {
     console.error("Error deleting page: ", error);
