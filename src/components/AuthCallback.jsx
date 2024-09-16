@@ -13,14 +13,14 @@ const AuthCallback = () => {
   const getUserData = async () => {
     try {
       const userData = await getUser();
-      if (userData && userData.token) {
+      if (userData) {
         console.log(userData);
-        localStorage.setItem("token", userData.token);
+        // localStorage.setItem("token", userData.token);
         localStorage.setItem("user", JSON.stringify(userData));
         dispatch(setUser(userData));
         navigate("/clients");
       } else {
-        throw new Error("User data or token not found");
+        throw new Error("User data not found");
       }
     } catch (error) {
       console.error("Failed to fetch user after Google login", error);
