@@ -48,7 +48,7 @@ const App = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   const shouldShowHeader = useMemo(() => {
-    const noHeaderPaths = ["/login", "/register", "/admin"];
+    const noHeaderPaths = ["/login", "/register", "/admin", "/auth-callback"];
     return !noHeaderPaths.some((path) => location.pathname.startsWith(path));
   }, [location.pathname]);
 

@@ -8,37 +8,31 @@ import { setUser } from "../redux/reducers/userReducer";
 import { login } from "../api";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 
-const InputField = React.memo(({
-  type,
-  id,
-  name,
-  label,
-  placeholder,
-  value,
-  onChange,
-}) => {
-  console.log("InputField");
-  return (
-    <div className="mb-4">
-      <label
-        htmlFor={id}
-        className="block text-sm font-medium text-gray-700 mb-1"
-      >
-        {label}
-      </label>
-      <input
-        type={type}
-        id={id}
-        name={name}
-        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-privyr-teal"
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        required
-      />
-    </div>
-  );
-});
+const InputField = React.memo(
+  ({ type, id, name, label, placeholder, value, onChange }) => {
+    console.log("InputField");
+    return (
+      <div className="mb-4">
+        <label
+          htmlFor={id}
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          {label}
+        </label>
+        <input
+          type={type}
+          id={id}
+          name={name}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-privyr-teal"
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          required
+        />
+      </div>
+    );
+  }
+);
 
 const SubmitButton = ({ loading }) => (
   <button
@@ -89,6 +83,26 @@ const SignIn = () => {
     [credentials, dispatch, navigate]
   );
 
+  const handleGuestLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      const data = await login({ email: "sample@one.com", password: "sample1" });
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data));
+      dispatch(setUser(data));
+      navigate(`/clients`);
+      toast.success("User Signed In 👤");
+    } catch (error) {
+      console.error(
+        "Login failed",
+        error.response?.data?.message || error.message
+      );
+      setCredentials((prev) => ({ ...prev, password: "" }));
+      toast.error(`Login failed, please try again`);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-4">
       <img src={Logo} alt="logo" className="h-8 mb-4" />
@@ -103,6 +117,14 @@ const SignIn = () => {
           <span className="px-4 text-gray-500">OR</span>
           <div className="flex-grow border-t border-gray-300"></div>
         </div>
+
+        <button
+          onClick={handleGuestLogin}
+          className="w-full bg-blue-600 font-semibold text-white py-2 px-4 rounded-md my-6 flex items-center justify-center hover:bg-opacity-90 transition duration-300"
+        >
+          Sign In As Guest{" "}
+          <span className="text-xs font-normal">(No Credentials required)</span>
+        </button>
 
         <form onSubmit={loginUser}>
           <InputField
