@@ -6,7 +6,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true,
+  // withCredentials: true,
 });
 
 api.interceptors.request.use(
@@ -32,10 +32,19 @@ export const login = async (userData) => {
   return response.data;
 };
 
-export const googleAuth = async (code) => {
-  const response = await api.get(`/auth/google?code=${code}`);
-  return response;
-}
+const apiGoogle = axios.create({
+  baseURL: "https://crm-server-topaz-rho.vercel.app/api/auth/",
+  // withCredentials: true,
+});
+
+export const googleAuth = (code) => apiGoogle.get(`/google?code=${code}`);
+
+// export const googleAuth = async (code) => {
+//   console.log("api code"+ code);
+//   const response = await axios.get(`https://crm-server-topaz-rho.vercel.app/api/auth/google?code=${code}`);
+//   console.log(response);
+//   return response;
+// }
 
 export const getUser = async () => {
   const response = await api.get("/auth/user");

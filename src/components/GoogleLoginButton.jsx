@@ -4,20 +4,19 @@ import { useDispatch } from "react-redux";
 import { FaGoogle } from "react-icons/fa";
 import { API_BASE_URL } from "../../config";
 import { setUser } from "../redux/reducers/userReducer";
-import { getUser } from "../api";
+import { getUser, googleAuth } from "../api";
 
 const GoogleLoginButton = () => {
   
   const responseGoogle = async (authResult) => {
     try {
       console.log(authResult.code);
-      const code = authResult.code;
-      if(code) {
-        const result = await googleAuth(code);
+      if(authResult["code"]) {
+        const result = await googleAuth(authResult.code);
         console.log(result);
       }
     } catch (error) {
-      console.log("Error while google logging: ", error)
+      console.log("Error while google login: ", error)
     }
   }
 
