@@ -1,42 +1,31 @@
 import React, { useEffect } from "react";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useDispatch } from "react-redux";
+import { FaGoogle } from "react-icons/fa";
 import { API_BASE_URL } from "../../config";
 import { setUser } from "../redux/reducers/userReducer";
-import { FaGoogle } from "react-icons/fa";
-import { useDispatch } from "react-redux";
 import { getUser } from "../api";
 
 const GoogleLoginButton = () => {
-  const dispatch = useDispatch();
-
-  const handleGoogleLogin = () => {
-    window.location.href = `${API_BASE_URL}/auth/google`;
-  };
   
-  // const handleGoogleLogin = () => {
-  //   const googleLoginWindow = window.open(
-  //     `${API_BASE_URL}/auth/google`,
-  //     "_blank",
-  //     "width=500,height=600"
-  //   );
+  const responseGoogle = async (authResult) => {
+    try {
+      console.log(authResult.code);
+      const code = authResult.code;
+      if(code) {
+        const result = await googleAuth(code);
+        console.log(result);
+      }
+    } catch (error) {
+      console.log("Error while google logging: ", error)
+    }
+  }
 
-  //   const checkAuth = setInterval(async () => {
-  //     if (googleLoginWindow.closed) {
-  //       clearInterval(checkAuth);
-  //       try {
-  //         const userData = await getUser();
-  //         if (userData) {
-  //           console.log(userData);
-  //           localStorage.setItem("token", userData.token);
-  //           localStorage.setItem("user", JSON.stringify(userData));
-  //           dispatch(setUser(userData));
-  //           navigate("/clients");
-  //         }
-  //       } catch (error) {
-  //         console.error("Failed to fetch user after Google login", error);
-  //       }
-  //     }
-  //   }, 500);
-  // };
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: responseGoogle,
+    onError: responseGoogle,
+    flow: "auth-code",
+  })
 
   return (
     <button

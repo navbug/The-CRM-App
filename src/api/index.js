@@ -32,6 +32,11 @@ export const login = async (userData) => {
   return response.data;
 };
 
+export const googleAuth = async (code) => {
+  const response = await api.get(`/auth/google?code=${code}`);
+  return response;
+}
+
 export const getUser = async () => {
   const response = await api.get("/auth/user");
   return response.data;
