@@ -105,7 +105,7 @@ const Header = () => {
       <span className="sr-only">View profile</span>
       {profileUser?.avatar ? (
         <img
-          src={avatar}
+          src={profileUser.avatar}
           alt="Profile"
           className="w-8 h-8 object-cover rounded-full"
         />
