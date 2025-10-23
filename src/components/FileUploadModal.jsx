@@ -50,6 +50,7 @@ const FileUploadModal = ({ isOpen, onClose, onFileUploaded }) => {
 
     try {
       const file = await uploadFile(formData);
+      console.log(file);
       setUploadComplete(true);
       onFileUploaded(file);
     } catch (error) {
