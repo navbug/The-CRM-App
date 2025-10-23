@@ -186,14 +186,6 @@ const FileDetails = () => {
                   <br />
                   {file.template}
                   <br />
-                  <a
-                    href={`http://localhost:4000${file.fileLink}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline"
-                  >
-                    {`http://localhost:4000${file.fileLink}`}
-                  </a>
                 </div>
                 <button
                   onClick={handleDownload}
