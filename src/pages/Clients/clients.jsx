@@ -23,7 +23,7 @@ const Clients = () => {
       await addClient(clientInfo);
       const fetchedClients = await fetchClients();
       dispatch(setInitialClients(fetchedClients));
-      toast.success(`Added New Client 🔗`);
+      // toast.success(`Added New Client 🔗`);
     } catch (error) {
       console.error("Error adding client:", error);
       toast.error("Failed to add client. Please try again.");
