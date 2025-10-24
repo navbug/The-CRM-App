@@ -17,6 +17,8 @@ const Header = () => {
   const [profileUser, setProfileUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  console.log(profileUser);
+
   const profileMenuRef = useRef(null);
   const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
@@ -111,6 +113,7 @@ const Header = () => {
           src={profileUser.avatar}
           alt="Profile"
           className="w-8 h-8 object-cover rounded-full"
+          loading="lazy"
         />
       ) : (
         <div className="w-6 h-6 text-xl font-bold text-white flex justify-center items-center">
@@ -132,6 +135,7 @@ const Header = () => {
                   src={profileUser.avatar}
                   alt="Profile"
                   className="w-14 h-14 object-cover rounded-full"
+                  loading="lazy"
                 />
               ) : (
                 <div className="w-14 h-14 text-3xl font-bold text-white flex justify-center items-center">

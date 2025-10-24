@@ -1,19 +1,29 @@
 import React, { useEffect } from "react";
-import { useGoogleLogin } from "@react-oauth/google";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
+import { useGoogleLogin } from "@react-oauth/google";
 import { API_BASE_URL } from "../../config";
 import { setUser } from "../redux/reducers/userReducer";
 import { getUser, googleAuth } from "../api";
 
 const GoogleLoginButton = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   
   const responseGoogle = async (authResult) => {
     try {
       console.log(authResult.code);
       if(authResult["code"]) {
         const result = await googleAuth(authResult.code);
+        const user = result.data;
+        const token = result.data.token;
         console.log(result);
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        dispatch(setUser(user));
+        navigate(`/clients`);
+        toast.success("User Signed In 👤");
       }
     } catch (error) {
       console.log("Error while google login: ", error)

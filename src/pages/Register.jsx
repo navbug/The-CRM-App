@@ -7,6 +7,7 @@ import Logo from "../assets/icons/privyr_logo.svg";
 import { setUser } from "../redux/reducers/userReducer";
 import { register } from "../api";
 import GoogleLoginButton from "../components/GoogleLoginButton";
+import GoogleWrapper from "../components/GoogleWrapper";
 
 const InputField = React.memo(
   ({ type, id, name, label, placeholder, value, onChange }) => (
@@ -97,7 +98,7 @@ const Register = () => {
           Register to Privyr
         </h2>
 
-        <GoogleLoginButton />
+        <GoogleWrapper />
 
         <div className="flex items-center my-4 font-semibold">
           <div className="flex-grow border-t border-gray-300"></div>

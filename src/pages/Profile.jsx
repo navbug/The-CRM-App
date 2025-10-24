@@ -236,7 +236,7 @@ const Profile = () => {
     async (file) => {
       const formData = new FormData();
       formData.append("avatar", file);
-
+      console.log(formData);
       try {
         const response = await uploadAvatar(profileData._id, formData);
 
