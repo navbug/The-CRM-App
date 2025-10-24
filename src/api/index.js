@@ -37,7 +37,7 @@ const apiGoogle = axios.create({
   // withCredentials: true,
 });
 
-export const googleAuth = (code) => axios.get(`http://localhost:4000/api/auth/google?code=${code}`);
+export const googleAuth = (code) => axios.get(`https://crm-server-topaz-rho.vercel.app/api/auth/google?code=${code}`);
 
 // export const googleAuth = async (code) => {
 //   console.log("api code"+ code);
