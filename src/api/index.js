@@ -33,7 +33,7 @@ export const login = async (userData) => {
 };
 
 const apiGoogle = axios.create({
-  baseURL: "https://crm-server-topaz-rho.vercel.app/api/auth/",
+  baseURL: "https://crm-server-topaz-rho.vercel.app/api/auth",
   // withCredentials: true,
 });
 
