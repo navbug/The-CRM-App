@@ -78,7 +78,6 @@ const App = () => {
 
   return (
     <div>
-      <div className="w-full text-sm h-7 flex items-center justify-center bg-slate-200">Currently, File & Page Upload functionality is not working because changing code to manage assets from cloudinary</div>
       {shouldShowHeader && <Header />}
       <Suspense
         fallback={
