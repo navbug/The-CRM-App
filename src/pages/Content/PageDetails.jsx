@@ -152,7 +152,7 @@ const PageDetails = () => {
           <div className="w-full min-h-64 space-y-4 flex flex-col bg-white rounded-sm shadow-md p-4 flex-grow gap-4">
             <div className="h-84 flex flex-col justify-center items-center gap-2">
               <iframe
-                src={`http://localhost:4000${page.pdfLink}`}
+                src={`${API_BARE_BASE_URL}${page.pdfLink}`}
                 title={page.title}
                 width="100%"
                 height="500px"
