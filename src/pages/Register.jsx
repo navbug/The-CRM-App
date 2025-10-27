@@ -95,7 +95,7 @@ const Register = () => {
       <img src={Logo} alt="logo" className="h-8 mb-4" />
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
         <h2 className="text-2xl font-bold text-center mb-4">
-          Register to Privyr
+          Register to Privyr Clone
         </h2>
 
         <GoogleWrapper />
