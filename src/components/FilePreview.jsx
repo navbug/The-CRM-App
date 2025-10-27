@@ -47,7 +47,7 @@ const FilePreview = ({ file, onBack, onSend, selectedOption, clientName }) => {
         />
       </div>
 
-      <button onClick={() => onSend(`${templateMessageToSend} http://localhost:4000${file.fileLink}`, "file")}
+      <button onClick={() => onSend(`${templateMessageToSend} ${file.fileLink}`, "file")}
         className="bg-teal-500 text-white px-4 py-3 rounded-md hover:bg-teal-600 transition duration-300 mt-6 flex items-center justify-center text-sm font-medium gap-3"
       >
         <IoSend className='w-4 h-4'/> SEND VIA {selectedOption.toUpperCase()}

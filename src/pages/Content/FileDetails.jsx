@@ -17,6 +17,7 @@ import NoDataWrapper from "../../components/NoDataWrapper";
 import Loading from "../../components/Loading";
 import { PuffLoader } from "react-spinners";
 import toast from "react-hot-toast";
+import { FaFile } from "react-icons/fa6";
 
 const FileDetails = () => {
   const [file, setFile] = useState(null);
@@ -63,14 +64,31 @@ const FileDetails = () => {
     if (window.confirm("Are you sure you want to delete this file?")) {
       await deleteFile(id);
       navigate("/content/files");
-      
+
       toast.remove(`File Template Deleted`);
     }
   };
 
+  // const handleDownload = () => {
+  //   if (file && file.fileLink) {
+  //     window.open(`${file.fileLink}`, "_blank");
+  //   }
+  // };
   const handleDownload = () => {
     if (file && file.fileLink) {
-      window.open(`${file.fileLink}`, "_blank");
+      const link = document.createElement("a");
+      link.href = file.fileLink;
+
+      // Check if filename already has .pdf extension
+      let downloadName = file.title;
+      // if (file.mimeType === "application/pdf" && !downloadName.toLowerCase().endsWith('.pdf')) {
+      // }
+      downloadName += ".pdf";
+
+      link.download = downloadName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   };
 
@@ -81,7 +99,9 @@ const FileDetails = () => {
   }, []);
 
   const renderPreview = () => {
-    if (file.mimeType.startsWith("image/")) {
+    if (
+      file.mimeType.startsWith("image/" || file.mimeType === "application/pdf")
+    ) {
       return (
         <img
           src={`${file.fileLink}`}
@@ -89,17 +109,13 @@ const FileDetails = () => {
           className="max-w-full h-auto"
         />
       );
-    } else if (file.mimeType === "application/pdf") {
-      return (
-        <iframe
-          src={`${API_BARE_BASE_URL}${file.fileLink}`}
-          title={file.title}
-          width="100%"
-          height="500px"
-        />
-      );
     } else {
-      return <div>Preview not available for this file type.</div>;
+      return (
+        <div className="flex flex-col items-center justify-center py-8 text-gray-400">
+          <FaFile className="w-16 h-16 mb-4" />
+          <p className="text-sm">PDF Document</p>
+        </div>
+      );
     }
   };
 
