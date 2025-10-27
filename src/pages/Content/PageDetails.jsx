@@ -69,7 +69,7 @@ const PageDetails = () => {
 
   const handleDownloadPDF = () => {
     if (page && page.pdfLink) {
-      window.open(`${API_BARE_BASE_URL}/${page.pdfLink}`, "_blank");
+      window.open(`${API_BARE_BASE_URL}${page.pdfLink}`, "_blank");
     }
   };
 
@@ -152,7 +152,7 @@ const PageDetails = () => {
           <div className="w-full min-h-64 space-y-4 flex flex-col bg-white rounded-sm shadow-md p-4 flex-grow gap-4">
             <div className="h-84 flex flex-col justify-center items-center gap-2">
               <iframe
-                src={`${API_BARE_BASE_URL}/${page.pdfLink}`}
+                src={`http://localhost:4000${page.pdfLink}`}
                 title={page.title}
                 width="100%"
                 height="500px"

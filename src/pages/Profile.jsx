@@ -104,7 +104,7 @@ const ProfilePhoto = React.memo(({ avatar, name, onEditClick }) => (
       <div className="w-20 h-20 bg-gray-300 rounded-full flex items-center justify-center text-3xl overflow-hidden">
         {avatar ? (
           <img
-            src={`${API_BARE_BASE_URL}${avatar}`}
+            src={avatar}
             alt="Profile"
             className="w-full h-full object-cover"
           />
@@ -236,7 +236,7 @@ const Profile = () => {
     async (file) => {
       const formData = new FormData();
       formData.append("avatar", file);
-
+      console.log(formData);
       try {
         const response = await uploadAvatar(profileData._id, formData);
 
@@ -253,6 +253,8 @@ const Profile = () => {
     },
     [profileData._id, fetchUserInfo]
   );
+
+  console.log(profileData);
 
   return (
     <div className="max-w-2xl mx-auto p-4">

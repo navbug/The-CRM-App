@@ -40,7 +40,7 @@ const PagePreview = ({ page, onBack, onSend, selectedOption, clientName }) => {
         />
       </div>
       
-      <button onClick={() => onSend(`${templateMessageToSend} ${API_BARE_BASE_URL}${page.pdfLink}`, "page")}
+      <button onClick={() => onSend(`${templateMessageToSend} http://localhost:4000${page.pdfLink}`, "page")}
         className="bg-teal-500 text-white px-4 py-3 rounded-md hover:bg-teal-600 transition duration-300 mt-6 flex items-center justify-center text-sm font-medium gap-2"
       >
         <IoSend className='w-4 h-4'/>
