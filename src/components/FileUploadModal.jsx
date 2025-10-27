@@ -11,7 +11,6 @@ const FileUploadModal = ({ isOpen, onClose, onFileUploaded }) => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    console.log(file);
     if (file) {
       setSelectedFile(file);
       setFileTitle(file.name.replace(".pdf", ""));
@@ -25,7 +24,6 @@ const FileUploadModal = ({ isOpen, onClose, onFileUploaded }) => {
   const handleDrop = (event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];
-    console.log(file);
     if (file) {
       setSelectedFile(file);
       setFileTitle(file.name.replace(".pdf", ""));
@@ -34,7 +32,7 @@ const FileUploadModal = ({ isOpen, onClose, onFileUploaded }) => {
 
   const handleUpload = async () => {
     if (!selectedFile) return;
-    console.log(selectedFile)
+
     setUploading(true);
     const currentDate = formatDateWithYear(new Date());
     const activity = JSON.stringify([
@@ -50,24 +48,8 @@ const FileUploadModal = ({ isOpen, onClose, onFileUploaded }) => {
     formData.append("lastUpdated", currentDate);
     formData.append("activity", activity);
 
-    console.log("=== FormData Contents ===");
-      for (let [key, value] of formData.entries()) {
-        if (value instanceof File) {
-          console.log(key, ":", {
-            name: value.name,
-            size: value.size,
-            type: value.type
-          });
-        } else {
-          console.log(key, ":", value);
-        }
-      }
-      console.log("========================");
-
-
     try {
       const file = await uploadFile(formData);
-      console.log(file);
       setUploadComplete(true);
       onFileUploaded(file);
     } catch (error) {

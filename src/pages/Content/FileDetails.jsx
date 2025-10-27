@@ -70,11 +70,9 @@ const FileDetails = () => {
 
   const handleDownload = () => {
     if (file && file.fileLink) {
-      window.open(`${file.fileLink}`, "_blank");
+      window.open(`${API_BARE_BASE_URL}${file.fileLink}`, "_blank");
     }
   };
-
-  console.log(file);
 
   useEffect(() => {
     fetchFileDetails(id);
@@ -84,7 +82,7 @@ const FileDetails = () => {
     if (file.mimeType.startsWith("image/")) {
       return (
         <img
-          src={`${file.fileLink}`}
+          src={`${API_BARE_BASE_URL}${file.fileLink}`}
           alt={file.title}
           className="max-w-full h-auto"
         />
@@ -188,6 +186,14 @@ const FileDetails = () => {
                   <br />
                   {file.template}
                   <br />
+                  <a
+                    href={`${API_BARE_BASE_URL}${file.fileLink}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline"
+                  >
+                    {`${API_BARE_BASE_URL}${file.fileLink}`}
+                  </a>
                 </div>
                 <button
                   onClick={handleDownload}
