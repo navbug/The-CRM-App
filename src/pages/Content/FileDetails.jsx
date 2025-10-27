@@ -186,14 +186,6 @@ const FileDetails = () => {
                   <br />
                   {file.template}
                   <br />
-                  <a
-                    href={`${API_BARE_BASE_URL}${file.fileLink}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline"
-                  >
-                    {`${API_BARE_BASE_URL}${file.fileLink}`}
-                  </a>
                 </div>
                 <button
                   onClick={handleDownload}

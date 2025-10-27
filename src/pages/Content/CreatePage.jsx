@@ -87,9 +87,6 @@ const CreatePage = () => {
       formData.append("pdf", pdfBlob, "page.pdf");
 
       await addPage(formData);
-      // await axios.post("http://localhost:4000/api/content/page", formData, {
-      //   headers: { "Content-Type": "multipart/form-data" },
-      // });
       navigate("/content/pages");
 
       toast.success(`Added New Page Template 🔗`);

@@ -30,7 +30,7 @@ const Pages = () => {
   // const handleDelete = async (pageId) => {
   //   if (window.confirm("Are you sure you want to delete this page?")) {
   //     try {
-  //       await axios.delete(`http://localhost:4000/api/content/page/${pageId}`);
+  //       await axios.delete(`${API_BARE_BASE_URL}/api/content/page/${pageId}`);
   //       fetchPages();
   //     } catch (error) {
   //       console.error("Error deleting page:", error);
